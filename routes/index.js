@@ -1,19 +1,11 @@
+
 var express = require('express');
 var router = express.Router();
-var passport = require('passport');
-/* GET home page. */
+router.get('/home', function(req, res, next) {  
 
-router
-.post('/login', function(req, res, next) { 
- 
-  
-
-  res.render('index', { title: 'Express1 Login'+req.ip}) ;
+  res.render('index', { title: 'Express1 Login'}) ;
 /*res.redirect('/');*/
 });
-
-
-
 
 
 module.exports = router;
