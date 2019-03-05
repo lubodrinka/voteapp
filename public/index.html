@@ -1,22 +1,33 @@
-<html>
+<!DOCTYPE html>
 
 <script src="javascripts/frontend.js" defer type="text/javascript"> </script>
+<link href="stylesheets/style.css" rel="stylesheet">
+<Body  onLoad="load();">
 
+  <div class="card">
+   <img src="" id="socialPhoto"  alt="Avatar" >
+  <div class="container">
+    <h4><b id="socialName">John Doe </b></h4> 
+    <p>A & E</p> 
+  </div>
+</div> 
+<br >
 <h4>JJJJJddJ Hello</h4>
 <button  id='sign' onClick ="sign_in_G()">Hello</button>
-<form method="post" action="/auth/google">
-   <!-- <input type="test" name="field1">
-    <input type="test" name="field2"> -->
+<!-- <form method="post" action="/auth/google">
+   <input type="test" name="field1">
+    <input type="test" name="field2"> 
     <input value="sign with Google" type="submit">
   </form>
   <br>
   <form method="post" action="/login/twitter">
-    <!-- <input type="test" name="field1">
-     <input type="test" name="field2"> -->
+    <input type="test" name="field1">
+     <input type="test" name="field2">
      <input value="sign with Twitter" type="submit">
-   </form>
+   </form> -->
    <p>View your <a href="/auth/google">profilegoogle</a>.</p>
    <p>View your <a href="/login/twitter">profiletwitter</a>.</p>
    <p>View your <a href="/home">home</a>.</p>
    <p>View your <a href="/users">users</a>.</p>
+  </Body>
 </html>

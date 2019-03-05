@@ -11,7 +11,7 @@ var Strategy = require('passport-twitter').Strategy;
 
 
 
-var trustProxy = false;
+var trustProxy =false;
 /*
 if (process.env.DYNO) {
 
@@ -42,7 +42,7 @@ passport.use(new Strategy({
 
     consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
 
-    callbackURL: '/oauth/callback',
+    callbackURL: '/oauth/twitter/callback',
 
     proxy: trustProxy
 
@@ -59,7 +59,14 @@ passport.use(new Strategy({
     // allows for account linking and authentication with other identity
 
     // providers.
+    //
+   // let recipes = JSON.parse(sessionStorage.getItem(this.state.user)) || [];
+   let profilejSOn=(profile.json);
 
+   console.log("§§!"+profile.displayName);
+
+   console.log(profile.photos[0].value);
+//sessionStorage.setItem(1,  JSON.stringify({Name:profilejSOn.displayName ,Photo:profilejSOn.photos[0].value}));
     return cb(null, profile);
 
   }));
@@ -104,17 +111,9 @@ passport.deserializeUser(function(obj, cb) {
 
 
 
-
-
-
-    app = express();
-
-
-
-
 // Define routes.
 
-
+app = express();
 
 
 // Use application-level middleware for common functionality, including
@@ -139,14 +138,14 @@ app.use(passport.initialize());
 
 app.use(passport.session());
     app.get('/', function (req, res) {
-
+        console.log("home send");
         res.render('home', { user: req.user });
-
+  
     });
 
 
 
-    app.get('/tlogin',
+    app.get('/login',
 
         function (req, res) {
 
@@ -156,8 +155,8 @@ app.use(passport.session());
 
             console.log('Headers:');
 
-            console.log(req.headers);
-
+            console.log("!req.headers!"+req.headers);
+         
             res.render('login');
 
         });
@@ -173,12 +172,15 @@ app.use(passport.session());
 
     app.get('/oauth/twitter/callback',
 
-        passport.authenticate('twitter', { failureRedirect: '/tlogin' }),
+        passport.authenticate('twitter', { failureRedirect: '/login' }),
 
         function (req, res) {
-            console.log("login send");
-            res.redirect('/');
-
+            console.log(req.ip);
+           console.log(req.user._json);
+            console.log("login send"+req.user._json.screen_name);
+  
+           res.redirect('/');
+           
         });
 
 
@@ -188,7 +190,8 @@ app.use(passport.session());
         require('connect-ensure-login').ensureLoggedIn(),
 
         function (req, res) {
-
+           
+            console.log("profile send");
             res.render('profile', { user: req.user });
 
         });
