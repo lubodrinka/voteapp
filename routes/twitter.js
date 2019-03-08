@@ -172,15 +172,29 @@ app.use(passport.session());
 
     app.get('/oauth/twitter/callback',
 
-        passport.authenticate('twitter', { failureRedirect: '/login' }),
+        passport.authenticate('twitter', { failureRedirect: '/login' }),  function (req, res) {
 
-        function (req, res) {
+        
             console.log(req.ip);
-           console.log(req.user._json);
-            console.log("login send"+req.user._json.screen_name);
+           console.log(req.user.id);
+            console.log("login send"+req.user.displayName);
+
+            Person.findOne({ ip: req.ip }, function (err, docs) {
+          if (err) alert(err);
+              if (docs) {
+       //console.log("title: " + docs + 'username already taken');
+            //res.send('username already taken');
+          } else {
+          
+            const kitty = new Person({ip: req.ip, social:'twitter',name: req.user._json.screen_name, url:req.user.photos[0].value,id:req.user.id });
+            kitty.save().then(() => console.log('new Person save'+docs));
   
-           res.redirect('/');
+
+        }
+          
            
+        });
+       res.redirect('/');
         });
 
 

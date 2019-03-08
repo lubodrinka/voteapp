@@ -1,21 +1,27 @@
 body {
-  padding: 50px;
+ margin: 0;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+main{
+   padding: 50px;
 }
 
 a {
   color: #00B7FF;
 }
 
-.card {  width: 8vw;
-  height: 8vh;
-  border: 2px solid black;
-  border-color: blue;
+.card {  max-width:  20vw;
+  max-height: 8vh;  
   /* Add shadows to create the "card" effect */
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.5);
   transition: 0.3s;
-text-align: center;
+display: inline-flex;
+align-items: baseline;
+color: floralwhite;
+margin:10px 150px 10px 150px;
 }
+
 
 /* On mouse-over, add a deeper shadow */
 .card:hover {
@@ -23,13 +29,23 @@ text-align: center;
   
 }
 .card > img {
-  width: 15px;
-  height: 15px;
+  max-width:50px ;
+border-color: blue;
+ border-radius: 50%;
 }
-/* Add some padding inside the card container */
-.container {
-  padding: 2px 16px;
-} 
+
 #socialName{
   word-break: normal;
+}
+nav{
+
+min-height: 5vh;
+ width: 100%;
+ background-color: black;
+ display: inline-flex;
+ flex-flow: row-reverse; 
+ 
+}
+#signin{
+  margin:10px 0 5px 50px;
 }
