@@ -15,12 +15,14 @@ $(document).ready(function () {
       success: 'success'
 
     });
-    $('#modalUser').text("unregistered");
+    $('#signout').hide();
     $('#signin').show();
     $("#socialName").empty();
     $("#socialPhoto").empty();
   });
-
+  $('#signin').click(function (e) {
+    $('#signin').hide();
+     });
   $('#Home').click(function () {
     $("#navMyPolls").removeClass('active');
     $("#navAllPolls").removeClass('active');
@@ -106,11 +108,15 @@ $(document).ready(function () {
         $('#modalUser').attr("value", data.name);
         if (Array.isArray(data)) {
           // console.log("31" + JSON.stringify(data));
-
+          $('#signin').show();
+          $('#signout').hide();
+          $('#myPolls').hide();
           getAll(data);
 
         } else {
           $('#signin').hide();
+           $('#signout').show();
+            $('#myPolls').show();
           $('#modalUser').attr("value", data.name);
           $("#socialName").text(data.name);
           $("#socialPhoto").attr("src", data.url);
@@ -123,7 +129,7 @@ $(document).ready(function () {
         }
       } else {
         $('#modalUser').attr("value", "unregistered");
-        $('#signin').show();
+        
         $("#socialName").hide();
         $("#socialPhoto").hide();
 
