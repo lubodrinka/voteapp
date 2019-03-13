@@ -8,18 +8,36 @@ router.get('/autologin', function(req, res, next) {
 
   //
 
-  console.log('approot'+req.ip);
+  console.log('approot'+'req.ip');
   Person.findOne({ ip: req.ip }, function (err, docs) {
     if (err) errorHandler(err);
         if (docs) {
           console.log('username already taken');
-  //console.log("title: " + docs + 'username already taken');
-  res.json(docs);
+ //console.log("title: " + docs + 'username already taken');
+  res.send(docs);
   //
     } else {
-      res.render('index', { title: 'register first'}) ;
 
-      console.log('no username already taken');  
+Person.find({}, function(err, docs){
+  if (err) errorHandler(err);
+        if (docs) {
+          console.log('username already taken');
+  //console.log("title: " + docs + 'username already taken');
+
+
+
+  res.send(docs);
+  //
+    } else {
+
+     res.json( { name: 'first register first'  }) ;
+    }
+ } );
+
+
+ 
+
+     //console.log('no username already taken');  
   }    
   }); 
 

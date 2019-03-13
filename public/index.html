@@ -1,23 +1,42 @@
 <!DOCTYPE html>
-
+<head>
+<script src="/javascripts/jquery-3.3.1.min.js" type="text/javascript"> </script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 <script src="javascripts/frontend.js" defer type="text/javascript"> </script>
-<script src="javascripts/jquery-3.3.1.min.js"  type="text/javascript"> </script>
-<link href="stylesheets/style.css" rel="stylesheet">
-<Body  >
-<nav>
-     
-     
-  <div class="card"><a id="signin" href="/login/twitter">sign in</a>
-   <img src="" id="socialPhoto"  alt="Avatar" >
 
-    <b id="socialName"></b>
+<link href="stylesheets/style.css" rel="stylesheet">
+</head>
+<header>
+      <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">WebSiteName</a>
+          </div>
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="/">Home</a></li>
+            <li><a href="" data-toggle="modal" data-target="#myModal">New Poll</a></li>
+            <li><a href="/polls">My Polls</a></li>
+            <div class="card"><a id="signin" href="/login/twitter">sign in</a>
+              <img src="" id="socialPhoto" alt="Avatar">
+              <b id="socialName"></b>
+          </ul>
+          <form class="navbar-form navbar-right" action="/search">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Search">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+          </form>
+        </div>
+      </nav>
+      </header>
+<Body>
+
+  <main>
+    <br>
    
-</div> </nav>
-<main>
-<br >
-<h4 >JJJJJddJ Hello</h4>
-<button  id='sign' onClick ="sign_in_G()">Hello</button>
-<!-- <form method="post" action="/auth/google">
+
+    <!-- <form method="post" action="/auth/google">
    <input type="test" name="field1">
     <input type="test" name="field2"> 
     <input value="sign with Google" type="submit">
@@ -27,11 +46,49 @@
     <input type="test" name="field1">
      <input type="test" name="field2">
      <input value="sign with Twitter" type="submit">
-   </form> -->
-   <p>View your <a href="/auth/google">profilegoogle</a>.</p>
+   </form><p>View your <a href="/auth/google">profilegoogle</a>.</p>
+
+    <p>View your <a href="/users">users</a>.</p> -->
+    
    
-   <p>View your <a href="/users">users</a>.</p>
-   <p>View your <a href="/">root</a>.</p>
+    <div class="polls">
+
+    </div>
+    <div id="myModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Modal Header</h4>
+          </div>
+          <div class="modal-body">
+            <form method="post" action="newpoll">
+              <div>
+                <p>Name of Poll.</p>
+                <input type="text" name="Name">
+              </div>
+              <div class="ModalPollsinputs">
+                <p>Values of Poll.</p>
+                <input type="text" name="graphVal">
+                <input type="text" name="graphVal" >
+                 <input id="modalUser" type="hidden" name="User" >
+              </div>
+              <div class="btn">
+                <button id='addValueOptiontoModal' value='+'>+</button>
+                <input value="send" type="submit">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </main>
-  </Body >
+</Body>
+
 </html>

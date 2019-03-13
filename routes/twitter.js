@@ -180,12 +180,12 @@ app.use(passport.session());
             console.log("login send"+req.user.displayName);
 
             Person.findOne({ ip: req.ip }, function (err, docs) {
-          if (err) alert(err);
+          if (err) errorhandler(err);
               if (docs) {
        //console.log("title: " + docs + 'username already taken');
             //res.send('username already taken');
           } else {
-          
+          global.User =req.user._json.screen_name;
             const kitty = new Person({ip: req.ip, social:'twitter',name: req.user._json.screen_name, url:req.user.photos[0].value,id:req.user.id });
             kitty.save().then(() => console.log('new Person save'+docs));
   

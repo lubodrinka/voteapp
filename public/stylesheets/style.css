@@ -1,51 +1,113 @@
 body {
- margin: 0;
+  margin: 0;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-main{
-   padding: 50px;
+main {
+  padding: 50px;
 }
 
 a {
   color: #00B7FF;
 }
 
-.card {  max-width:  20vw;
-  max-height: 8vh;  
+.card {
+  max-width: 20vw;
+  max-height: 8vh;
   /* Add shadows to create the "card" effect */
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.5);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
   transition: 0.3s;
-display: inline-flex;
-align-items: baseline;
-color: floralwhite;
-margin:10px 150px 10px 150px;
+  display: inline-flex;
+  align-items: baseline;
+  color: floralwhite;
+  margin: 10px 150px 10px 150px;
 }
 
 
 /* On mouse-over, add a deeper shadow */
 .card:hover {
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-  
-}
-.card > img {
-  max-width:50px ;
-border-color: blue;
- border-radius: 50%;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+
 }
 
-#socialName{
+.card>img {
+  max-width: 50px;
+  border-color: blue;
+  border-radius: 50%;
+}
+
+#socialName {
   word-break: normal;
 }
-nav{
 
-min-height: 5vh;
- width: 100%;
- background-color: black;
- display: inline-flex;
- flex-flow: row-reverse; 
- 
+nav {
+
+  min-height: 5vh;
+  width: 100%;
+  background-color: black;
+  display: inline-flex;
+  flex-flow: row-reverse;
+
 }
-#signin{
-  margin:10px 0 5px 50px;
+
+#signin {
+  margin: 10px 0 5px 50px;
+
+}
+
+.modal-body>form * {
+  margin: 5px;
+}
+
+.ModalPollsinputs>* {
+  display: block;
+
+
+}
+
+@import url('https://fonts.googleapis.com/css?family=Gaegu|Gloria+Hallelujah|Great+Vibes|Indie+Flower|Lato|Open+Sans|Oswald|Permanent+Marker');
+
+.polls * {
+  width: 70%;
+  font-size: 22pt;
+  font-family: 'Permanent Marker', cursive;
+  background-color: lightgrey;
+  /* Green */
+  border: 2px solid #555555;
+  border-radius: 20%;
+  color: black;
+  padding: 5px 8px;
+  text-align: center;
+  text-decoration: none;
+  margin: 10px 10px;
+  -webkit-transition-duration: 0.4s;
+  /* Safari */
+  transition-duration: 0.4s;
+  cursor: pointer;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6),
+    3px 4px 12px rgba(0, 0, 0, 0.5),
+    4px 6px 15px rgba(0, 0, 0, 0.4),
+    5px 8px 18px rgba(0, 0, 0, 0.3);
+
+
+}
+
+
+
+a:active,
+a:hover {
+  outline: 0;
+  border-color: rgb(154, 47, 255);
+  text-decoration-line: none;
+}
+
+.polls {
+  padding: 100px;
+  border: 1px solid rgb(82, 6, 6);
+  display: flex;
+  justify-content: center;
+  flex-flow: column;
+}
+iframe{
+  width: 100%;
 }
