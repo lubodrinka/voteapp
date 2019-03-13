@@ -8,7 +8,7 @@ const path = require('path');
 
 app.post('/newpoll', urlencodedParser, function (req, res, next) {
 
-    console.log(JSON.stringify(req.body));
+    //console.log(JSON.stringify(req.body));
     let Name = req.body.Name;
     let graphVal = req.body.graphVal;
     let User = req.body.User;
@@ -25,10 +25,10 @@ app.post('/newpoll', urlencodedParser, function (req, res, next) {
                
              
 
-            } console.log(Polls[Polls.length - 1]._id);
+            } //console.log(Polls[Polls.length - 1]._id);
             docs.save(function (err, docsaved) {
                 if (err) console.log(err);
-                console.log(Polls[Polls.length - 1]);
+                //console.log(Polls[Polls.length - 1]);
                 res.redirect('/polls/'+Polls[Polls.length - 1]._id+"/"+docs._id);
             });
             // res.send(Polls[Polls.length - 1]);
@@ -73,19 +73,19 @@ app.post('/newpoll', urlencodedParser, function (req, res, next) {
         if (docs) {
            
      var subdoc = docs.polls.id(subID);
-     console.log(subdoc);
+     //console.log(subdoc);
      var voteButtons ="";
      if(subdoc===null) return res.send('<h1>was deleted   <a href="/">Home</a><h1>');
          let subdates = subdoc.graphValue;    
             for (let x = 0; x <= subdates.length - 1; x++) {
-                                          config.data.datasets[0].data.push(1);
+                                          config.data.datasets[0].data.push(subdates[x].graphValue);
 config.data.labels.push(subdates[x].name);
-voteButtons+=' <input type="radio" class="votebutton btn-group btn btn-primary" name="votebutton" value="'+subdates[x].name+'" >'+subdates[x].name+'<br>';
+voteButtons+=' <input type="radio" class="votebutton" name="votebutton" value="'+subdates[x]._id+'" >'+subdates[x].name+'<br>';
    
             }
          
             //rgb(39, 27, 127)", "#9e0142", "#d53e4f", "#f46d43", "#fdae61", "#fee08b", "#ffffbf", "#e6f598", "#abdda4", "#66c2a5", "#3288bd", "#5e4fa2", "#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a", "#ffff99", "#b15928", "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf", "#1b9e77", "#d95f02", "#7570b3", "#e7298a", "#66a61e", "#e6ab02", "#a6761d", "#666666"  
-                
+     // let shuffled = color.map((a) => ({sort: Math.random(), value: a})).sort((a, b) => a.sort - b.sort) .map((a) => a.value);'+          
 //d3.interpolateRainbow() .range(["red", "white", "green"])d3.scaleOrdinal(d3.interpolateRainbow).domain([0, '+JSON.stringify()+ ' ]) ;"rgb(45, 27, 127)",...d3.schemeSpectral[5],...d3.schemePaired,...d3.schemeDark2
 var addcolor ="";
 if(subdates.length > 0)  {
@@ -103,32 +103,35 @@ for(let x=0;x<subdates.length;x++ ){
                         '  <script src="https://d3js.org/d3-color.v1.min.js"></script>'+
                         '<script src="https://d3js.org/d3-interpolate.v1.min.js"></script>'+
                         '<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>'+
-                        '<script src="https://d3js.org/d3-scale.v2.min.js"></script>'+
-                                                 '<script src="/javascripts/jquery-3.3.1.min.js" type="text/javascript"> </script>'+
+                        '<script src="/javascripts/jquery-3.3.1.min.js" type="text/javascript"> </script>'+
                         '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">'+
                         '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>' + 
-   '<script src="/javascripts/Chart.min.js"></script> <canvas id="myChart" width="400" height="400"></canvas>' +
+   '<script src="/javascripts/Chart.min.js"></script><main"><div class="mainContent"> <canvas  id="myChart" width="400" height="400"></canvas>' +
                         '<script>' +
                         'window.onload = function() {' +
                         'var ctx = document.getElementById("myChart").getContext("2d");' +
-                         'var color =['+addcolor+'];  ;'+
-                         'let shuffled = color.map((a) => ({sort: Math.random(), value: a})).sort((a, b) => a.sort - b.sort) .map((a) => a.value);'+
-                         
-                         
-                        
-                        
+                         'var color =['+addcolor+']; '+
+                                                 
                          'var config='+JSON.stringify(config)+";"+ 
                          ' console.log(color);'+
                        
                         ' config.data.datasets[0].backgroundColor=color;'+   'console.log(config);'+                    
                         "var myChart = new Chart(ctx,   config  )}; </script>"+
+                         '<form   id="formVote" method="get" action="/vote/'+subID+'/'+mainID+'" >'+                      
+                      ' <div >' +(voteButtons) +'</div>'+
+                       '  <input id="formVoteSubmit" class="btn-group btn btn-primary" value="send vote" type="submit">'+
+                       '</form></div>'+
                         '<div class="btn-group btn-group-justified">'+
                         '<a type="button" class="btn-group btn btn-primary" href="/">Home</a>'+
                         '<a type="button" class="btn-group btn btn-danger" href="/delete/'+subID+'/'+mainID+'">Delete poll</a>'+
                        ' </div>'+
-                       '<form  method="post" action="/vote/'+subID+'/'+mainID+'/" >'+                      
-                      ' <div class="btn-group btn-group-justified">' +(voteButtons) +'</div>'+
-                       '  <input value="send vote" type="submit"></form>'
+                       '<script>'+
+                       '$(document).ready(function () {'+
+                       '$("#formVoteSubmit").click(function () {'+
+                          ' var IsChecked = $(".votebutton").is(":checked");'+
+                        'if(!IsChecked){alert("select something");}})'+
+                      '  });</script></main>'
+                      
                         );
                 }
             });
@@ -170,6 +173,47 @@ docs.save(function (err) {
 }else{
     res.redirect("/"); 
  }
+
+}).get('/vote/:sid/:mid',  function (req, res, next) {
+
+//res.json({id:req.params, query:req.query.votebutton});
+
+let subID = req.params.sid;
+let mainID = req.params.mid;
+let votebutton_id=req.query.votebutton;
+console.log(votebutton_id);
+console.log( typeof subID==="undefined" || typeof  votebutton_id==="undefined");
+if((typeof subID==="undefined" || typeof  votebutton_id==="undefined")===false){
+Person.findById(mainID, function(err, docs){
+               
+    if (err) errorHandler(err);
+    if (docs) {
+       
+ var subdoc = docs.polls.id(subID).graphValue.id(votebutton_id);
+ var pollName = "";
+   console.log("187"+ subdoc);
+if(subdoc){
+    pollName =  subdoc.name;// $inc:{graphValue: 1};
+  console.log( subdoc.graphValue);
+subdoc.graphValue++;
+ docs.save(function (err) {
+if (err) return handleError(err);
+res.redirect('back'); 
+
+//res.send('<h2>'+docs.name +' the poll value '+ pollName+' was updated       <a href="/">Home</a></h2>' );
+});
+}}   
+});    
+ 
+
+}else{
+res.redirect('back'); 
+}
+
+
+
+
+
 
 });
 

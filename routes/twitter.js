@@ -184,9 +184,13 @@ app.use(passport.session());
               if (docs) {
        //console.log("title: " + docs + 'username already taken');
             //res.send('username already taken');
+            docs.signout=true;
+            docs.save(function (err) {
+if (err) return handleError(err);
+ });
           } else {
-          global.User =req.user._json.screen_name;
-            const kitty = new Person({ip: req.ip, social:'twitter',name: req.user._json.screen_name, url:req.user.photos[0].value,id:req.user.id });
+         
+            const kitty = new Person({signout:true,ip: req.ip, social:'twitter',name: req.user._json.screen_name, url:req.user.photos[0].value,id:req.user.id });
             kitty.save().then(() => console.log('new Person save'+docs));
   
 
