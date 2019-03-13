@@ -52,14 +52,19 @@ success: function(data) {
           $("#socialPhoto").attr("src", data.url);
          // console.log("50" + JSON.stringify(data));
           // console.log("54"+(data.polls.length+ data.polls ));
-          if (data.polls.length > 0) {
+         
+          //console.log(data.hasOwnProperty('polls'));
+          if( data.hasOwnProperty('polls')){
+             if (data.polls.length > 0) {
             for (let y = 0; y != data.polls.length - 1; y++) {
-              console.log("56"+ JSON.stringify(data._id));
+              //console.log("56"+ JSON.stringify(data._id));
               $(".polls").append("<a href='/polls/" + data.polls[y]._id + "/" +data._id+"' >" + data.polls[y].name + "</a>");
 
             }
           }
 
+          }
+         
 
 
         }
