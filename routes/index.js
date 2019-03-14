@@ -43,7 +43,7 @@ router.post('/autologin', function (req, res, next) {
 }).post('/mypolls', function (req, res, next) {
 
   //
-    
+  
 
   Person.findOne({ _id: JSON.parse(req.body.user_id) }, function (err, docs) {
     if (err) errorHandler(err);
@@ -52,8 +52,18 @@ router.post('/autologin', function (req, res, next) {
       //console.log("title: " + docs + 'username already taken');
       res.send(docs);
       //
+    }else{
+       Person.findOne({ ip: req.ip }, function (err, docs) {
+    if (err) errorHandler(err);
+    if (docs) {
+    
+      res.send(docs);
+      //
     }
   });
+    }
+  })
+ ;
 
 
 }).post('/allpolls', function (req, res, next) {

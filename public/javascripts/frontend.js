@@ -109,22 +109,22 @@ function  code(myString){
 
       if (data !== "") {
 
-        $('#modalUser').attr("value", JSON.stringify(data._id)  ); 
+        $('#modalUser').attr("value", Boolean( JSON.stringify(data._id))?JSON.stringify(data._id):"unregistered"  ); 
          $("#socialName").text(data.name);
-         
+        
         if (Array.isArray(data)) {
-          // console.log("31" + JSON.stringify(data));
+       
           $('#signin').show();
           $('#signout').hide();
-          $('#myPolls').hide(); 
+//          $('#myPolls').hide(); 
           $("#socialPhoto").attr("src", './images/favicon.jpg');
           getAll(data);
 
         } else {
           $('#signin').hide();
            $('#signout').show();
-            $('#myPolls').show();
-        
+           // $('#myPolls').show();
+           $('#modalUser').attr("value", "unregistered");
         
           // console.log("50" + JSON.stringify(data));
           // console.log("54"+(data.polls.length+ data.polls ));
@@ -135,7 +135,6 @@ function  code(myString){
         }
       } else {
         $('#modalUser').attr("value", "unregistered");
-        
         $("#socialName").hide();
         $("#socialPhoto").hide();
 
@@ -143,4 +142,16 @@ function  code(myString){
     }
   });
 
-});
+});/*
+
+                       $(document).ready(function () {
+                       $("#formVoteSubmit").click(function () {
+                           var IsChecked = $(".votebutton").is(":checked");
+                        if(!IsChecked){alert("select something");}
+                        var votedIpAndUser=JSON.stringify(votedIpAndUser);
+                         var userip= JSON.stringify(req.ip);
+                         var mainID= JSON.stringify(mainID); 
+                        if(votedIpAndUser.includes(mainID)|| votedIpAndUser.includes(userip))
+                        {alert("You have already vote");}
+                              });
+                        });*/

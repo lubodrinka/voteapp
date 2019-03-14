@@ -11,11 +11,12 @@ app.post('/newpoll', urlencodedParser, function (req, res, next) {
     //console.log(JSON.stringify(req.body));
     let pollName = req.body.pollName;
     let graphVal = req.body.graphVal;
-    let User_id = JSON.parse(req.body.User_id);
+    let User_id = req.body.User_id!='unregistered'?JSON.parse(req.body.User_id):req.body.User_id;
     // res.json({ working: (req.body) });
     //find one name and then add create name to 
-    console.log("newpoll "+User_id);
-    Person.findOne({ _id: User_id }, function (err, docs) {
+  
+   
+    Person.findOne(User_id!='unregistered'?{ _id:User_id}:{ip:req.ip}, function (err, docs) {
         if (err) errorhandler(err);
         if (docs) {
             var Polls = docs.polls;
@@ -80,9 +81,10 @@ voteButtons+=' <input type="radio" class="votebutton" name="votebutton" value="'
    
    } let visibledelete = '';
 
-console.log(docs._id.toString()+'\n'+JSON.parse(send_id));
-
-     if(docs._id.toString()!==JSON.parse(send_id) ){ visibledelete = ' disabled ';}   
+//console.log(docs._id.toString()+'\n'+JSON.parse(send_id));
+//console.log(docs.polls);
+     if(docs._id.toString()!==mainID ){ visibledelete = ' disabled ';} 
+ let votedIpAndUser=    subdoc.votedIpAndUser  ;
 let deleteButton ='<a role="button" type="button" class="btn-group btn btn-danger'+ 
 visibledelete+'" href="/delete/'+subID+'/'+mainID+'">Delete poll</a>';        
 
@@ -97,7 +99,18 @@ for(let x=4;x<subdates.length;x++ ){
     //https://www.paulirish.com/2009/random-hex-color-code-snippets/<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script><script src="https://d3js.org/d3-color.v1.min.js"></script><script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
 }
 }
-  
+  var user_id=(JSON.parse(send_id));
+  var subdocpolls=docs.polls.id(subID);
+var alreadyVoted = false;
+
+   
+ var userip=req.ip;
+
+ 
+   if(subdocpolls.votedIpAndUser.includes(user_id)||votedIpAndUser.includes(userip)){
+        subdocpolls.votedIpAndUser.push(user_id);
+        alreadyVoted=true;
+   }
 
 res.format({
 
@@ -111,14 +124,11 @@ res.format({
                         '<script>' +
                         'window.onload = function() {' +
                         'var ctx = document.getElementById("myChart").getContext("2d");' +
-                         'var color =['+addcolor+']; '+
-                                                 
-                         'var config='+JSON.stringify(config)+";"+ 
-                         ' console.log(color);'+
-                       
+                         'var color =['+addcolor+']; '+                                          
+                         'var config='+JSON.stringify(config)+";"+                                               
                         ' config.data.datasets[0].backgroundColor=color;'+                       
                         "var myChart = new Chart(ctx,   config  )}; </script>"+
-                         '<form   id="formVote" method="get" action="/vote/'+subID+'/'+mainID+'" >'+                      
+                         '<form   id="formVote" method="get" action="/vote/'+subID+'.'+mainID+'.'+JSON.parse(send_id)+'" >'+                      
                       ' <div >' +(voteButtons) +'</div>'+
                        '  <input id="formVoteSubmit" class="btn-group btn btn-primary" value="send vote" type="submit">'+
                        '</form></div>'+
@@ -130,7 +140,9 @@ res.format({
                        '$(document).ready(function () {'+
                        '$("#formVoteSubmit").click(function () {'+
                           ' var IsChecked = $(".votebutton").is(":checked");'+
-                        'if(!IsChecked){alert("select something");}})'+
+                        'if(!IsChecked){alert("select something");}'+                     
+                         'if('+ alreadyVoted+ '){alert("You have already vote");}'+
+                              '});'+
                       '  });</script></main>'
                       
                         );
@@ -155,6 +167,7 @@ res.format({
 
     let subID = req.params.sid;
     let mainID = req.params.mid;
+   
     if(subID!=""){
     Person.findById(mainID, function(err, docs){
                    
@@ -175,34 +188,40 @@ docs.save(function (err) {
     res.redirect("/"); 
  }
 
-}).get('/vote/:sid/:mid',  function (req, res, next) {
+}).get('/vote/:sid.:mid.:userid',  function (req, res, next) {
 
 //res.json({id:req.params, query:req.query.votebutton});
-
+console.log(JSON.stringify(req.params));
 let subID = req.params.sid;
 let mainID = req.params.mid;
+let user_id = req.params.userid;
 let votebutton_id=req.query.votebutton;
-//console.log(votebutton_id);
+console.log(user_id);
 //console.log( typeof subID==="undefined" || typeof  votebutton_id==="undefined");
 if((typeof subID==="undefined" || typeof  votebutton_id==="undefined")===false){
 Person.findById(mainID, function(err, docs){
                
     if (err) errorHandler(err);
     if (docs) {
-       
- var subdoc = docs.polls.id(subID).graphValue.id(votebutton_id);
+       var subdocpolls=docs.polls.id(subID);
+ var subdocgV = docs.polls.id(subID).graphValue.id(votebutton_id);
  var pollName = "";
-  // console.log("187"+ subdoc);
-if(subdoc){
-    pollName =  subdoc.name;// $inc:{graphValue: 1};
-  //console.log( subdoc.graphValue);
-subdoc.graphValue++;
+  
+if(subdocgV){
+    pollName =  subdocgV.name;// $inc:{graphValue: 1};
+  //forbid vote again
+  //console.log("187"+subdocpolls.votedIpAndUser.includes(mainID)+ subdocpolls);
+  if(!subdocpolls.votedIpAndUser.includes(user_id)){
+       subdocpolls.votedIpAndUser.push(user_id);
+       subdocgV.graphValue++;
  docs.save(function (err) {
-if (err) return handleError(err);
-res.redirect('back'); 
+if (err) return handleError(err);});
+  }
 
+
+res.redirect('back'); 
 //res.send('<h2>'+docs.name +' the poll value '+ pollName+' was updated       <a href="/">Home</a></h2>' );
-});
+
 }}   
 });    
  
