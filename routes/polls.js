@@ -14,7 +14,7 @@ app.post('/newpoll', urlencodedParser, function (req, res, next) {
     let User_id = JSON.parse(req.body.User_id);
     // res.json({ working: (req.body) });
     //find one name and then add create name to 
-    //console.log(User_id);
+    console.log("newpoll "+User_id);
     Person.findOne({ _id: User_id }, function (err, docs) {
         if (err) errorhandler(err);
         if (docs) {
@@ -26,7 +26,7 @@ app.post('/newpoll', urlencodedParser, function (req, res, next) {
             docs.save(function (err, docsaved) {
                 if (err) console.log(err);
                 //console.log(Polls[Polls.length - 1]);
-                res.redirect('/polls/'+Polls[Polls.length - 1]._id+"/"+docs._id+"/?hide="+JSON.stringify(User_id));
+                res.redirect('/polls/'+Polls[Polls.length - 1]._id+"/"+docs._id+"?"+'hide='+JSON.stringify(User_id));
             });
             // res.send(Polls[Polls.length - 1]);
            
@@ -80,7 +80,7 @@ voteButtons+=' <input type="radio" class="votebutton" name="votebutton" value="'
    
    } let visibledelete = '';
 
-
+console.log(docs._id.toString()+'\n'+JSON.parse(send_id));
 
      if(docs._id.toString()!==JSON.parse(send_id) ){ visibledelete = ' disabled ';}   
 let deleteButton ='<a role="button" type="button" class="btn-group btn btn-danger'+ 

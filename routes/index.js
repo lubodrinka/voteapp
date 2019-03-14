@@ -4,92 +4,102 @@ var router = express.Router();
 
 
 
-router.post('/autologin', function(req, res, next) { 
+router.post('/autologin', function (req, res, next) {
 
-  function findall(){
-    Person.find({}, function(err, docs){
-  if (err) errorHandler(err);
-        if (docs) {
-         // console.log('username already taken');
-  //console.log("title: " + docs + 'username already taken');
+  function findall() {
+    Person.find({}, function (err, docs) {
+      if (err) errorHandler(err);
+      if (docs) {
+        // console.log('username already taken');
+        //console.log("title: " + docs + 'username already taken');
 
-  res.send(docs);
-  }  else {
+        res.send(docs);
+      } else {
 
-     res.json( { name: 'first register first'  }) ;
-    }
-});}
- // console.log('approot'+req.body.user);
+        res.json({ name: 'first register first' });
+      }
+    });
+  }
+  // console.log('approot'+req.body.user);
   Person.findOne({ ip: req.ip }, function (err, docs) {
     if (err) errorHandler(err);
-        if (docs) {
-         // console.log('username already taken');
-//console .log("signout true autologin: " + docs.signout);
-      if(docs.signout===true){
-       res.send(docs);
-          }else{
-         findall();
-            }
-    //
+    if (docs) {
+      // console.log('username already taken');
+      //console .log("signout true autologin: " + docs.signout);
+      if (docs.signout === true) {
+        res.send(docs);
+      } else {
+        findall();
+      }
+      //
     } else {
 
-findall();
-  //
-   
- } });
+      findall();
+      //
 
-}).post('/mypolls', function(req, res, next) { 
-
-  //
-
-  Person.findOne({ _id: req.body.user }, function (err, docs) {
-    if (err) errorHandler(err);
-        if (docs) {
-         // console.log('myPoll username already taken');
- //console.log("title: " + docs + 'username already taken');
-  res.send(docs);
-  //
-    } });
- }).post('/allpolls', function(req, res, next) { 
-   // console.log(req.body);
-Person.find({}, function(err, docs){
-  if (err) errorHandler(err);
-        if (docs) {
-          console.log('allPolll username already taken');
-  //console.log("title: " + docs + 'username already taken');
-
-  res.send(docs);
-  //
-    } else {
-
-     res.json( { name: 'first register first'  }) ;
     }
- } );
+  });
 
-     //console.log('no username already taken');  
-      
-  
-
-}).post('/signout', function(req, res, next) { 
+}).post('/mypolls', function (req, res, next) {
 
   //
+    
 
-
-  Person.findOne({ _id: req.body.user }, function (err, docs) {
+  Person.findOne({ _id: JSON.parse(req.body.user_id) }, function (err, docs) {
     if (err) errorHandler(err);
-        if (docs) {
-         // console.log('signout '+req.body.signout);
-          docs.signout=req.body.signout;
-           docs.save(function (err) {
-if (err) return handleError(err);
-res.redirect('back'); });
- //console.log("title: " + docs + 'username already taken');
- 
-  //
-    } });
- });
+    if (docs) {
+     //  console.log('myPoll username already taken');
+      //console.log("title: " + docs + 'username already taken');
+      res.send(docs);
+      //
+    }
+  });
+
+
+}).post('/allpolls', function (req, res, next) {
+
+  // console.log(req.body);
+  Person.find({}, function (err, docs) {
+    if (err) errorHandler(err);
+
+    if (docs) {
+
+      //console.log('allPolll username already taken');
+      //console.log("title: " + docs + 'username already taken');
+      res.send(docs);
+      //
+    } else {
+
+      res.json({ name: 'first register first' });
+    }
+  });
+
+  //console.log('no username already taken');  
+
+
+
+}).post('/signout', function (req, res, next) {
 
   
+ // console.log(JSON.stringify(req.body));
+
+  Person.findOne({ _id: JSON.parse(req.body.user_id) }, function (err, docs) {
+    if (err) errorHandler(err);
+    if (docs) {
+      // console.log('signout '+req.body.signout);
+      docs.signout = req.body.signout;
+      docs.save(function (err) {
+        if (err) return handleError(err);
+        res.redirect('back');
+      });
+      //console.log("title: " + docs + 'username already taken');
+
+      //
+    }
+  });
+});
+
+
 
 
 

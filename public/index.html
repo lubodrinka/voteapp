@@ -1,11 +1,10 @@
 <!DOCTYPE html>
+<html>
 <head>
 <script src="/javascripts/jquery-3.3.1.min.js" type="text/javascript"> </script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 <script src="javascripts/frontend.js" defer type="text/javascript"> </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
-
 <link href="stylesheets/style.css" rel="stylesheet">
 </head>
 <header>
@@ -20,10 +19,12 @@
             <li id="navMyPolls"><a id="myPolls" href="/mypolls">My Polls</a></li>
             <li id="navAllPolls"><a id="allPolls" href="/allpolls">All Polls</a></li>
             <li><div class="card">
-              <img src="" id="socialPhoto" alt="Avatar">
+              <img src="./images/favicon.jpg" id="socialPhoto" alt="Avatar">
               <b id="socialName"></b>
               <a id="signin" href="/login/twitter">sign in</a>
-              <a id="signout" href="">sign out</a></li>
+              <a id="signout" href="">sign out</a>
+              </div>
+            </li>
               <li> <form class="navbar-form navbar-right" action="/search">
             <div class="form-group">
               <input type="text" class="form-control" placeholder="Search">
@@ -81,7 +82,7 @@
                  <input id="modalUser" type="hidden" name="User_id" >
               </div>
               <div class="btn">
-                <button id='addValueOptiontoModal' value='+'>+</button>
+                <button id="addValueOptiontoModal" value="+">+</button>
                 <input value="send" type="submit">
               </div>
             </form>

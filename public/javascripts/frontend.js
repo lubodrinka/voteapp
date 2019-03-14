@@ -10,7 +10,7 @@ $(document).ready(function () {
     $.ajax({
       type: "POST",
       url: 'signout',
-      data: { signout: false, user:$('#modalUser').attr("value") },
+      data: { signout: false, user_id:code($('#modalUser').attr("value") )},
       dataType: 'json',
       success: 'success'
 
@@ -35,7 +35,7 @@ $(document).ready(function () {
       url: '/mypolls',
       type: 'post',
       dataType: 'json',
-      data: { user: $('#modalUser').attr("value") },
+      data: { user_id: code($('#modalUser').attr("value")) },
       success: function (data) {
          $(".polls").empty();
         //update listalert(data);
@@ -53,7 +53,7 @@ $(document).ready(function () {
       url: '/allpolls',
       type: 'post',
       dataType: 'json',
-      data: { user: '' },
+      data: { user_id: '' },
       success: function (data) {
         //update listalert(data);
         $(".polls").empty();
@@ -96,10 +96,9 @@ $(document).ready(function () {
     }
   }
 function  code(myString){
- // return myString;
- console.log($('#modalUser').attr("value"));
- return JSON.stringify(myString)
-   ;
+
+ return myString?JSON.stringify(myString.replace(/"/g, "")):JSON.stringify("unregistered");
+  
 }
   $.ajax({
     url: '/autologin',
@@ -112,12 +111,13 @@ function  code(myString){
 
         $('#modalUser').attr("value", JSON.stringify(data._id)  ); 
          $("#socialName").text(data.name);
-          $("#socialPhoto").attr("src", data.url);
+         
         if (Array.isArray(data)) {
           // console.log("31" + JSON.stringify(data));
           $('#signin').show();
           $('#signout').hide();
-          $('#myPolls').hide();
+          $('#myPolls').hide(); 
+          $("#socialPhoto").attr("src", './images/favicon.jpg');
           getAll(data);
 
         } else {
@@ -130,7 +130,7 @@ function  code(myString){
           // console.log("54"+(data.polls.length+ data.polls ));
 
           //console.log(data.hasOwnProperty('polls'));
-
+  $("#socialPhoto").attr("src", data.url);
           getMy(data);
         }
       } else {
