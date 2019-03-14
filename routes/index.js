@@ -10,7 +10,7 @@ router.post('/autologin', function(req, res, next) {
     Person.find({}, function(err, docs){
   if (err) errorHandler(err);
         if (docs) {
-          console.log('username already taken');
+         // console.log('username already taken');
   //console.log("title: " + docs + 'username already taken');
 
   res.send(docs);
@@ -19,12 +19,12 @@ router.post('/autologin', function(req, res, next) {
      res.json( { name: 'first register first'  }) ;
     }
 });}
-  console.log('approot'+req.body.user);
+ // console.log('approot'+req.body.user);
   Person.findOne({ ip: req.ip }, function (err, docs) {
     if (err) errorHandler(err);
         if (docs) {
-          console.log('username already taken');
- console.log("signout true autologin: " + docs.signout);
+         // console.log('username already taken');
+//console .log("signout true autologin: " + docs.signout);
       if(docs.signout===true){
        res.send(docs);
           }else{
@@ -41,12 +41,11 @@ findall();
 }).post('/mypolls', function(req, res, next) { 
 
   //
-console.log(req.query);
-console.log(req.body);
+
   Person.findOne({ name: req.body.user }, function (err, docs) {
     if (err) errorHandler(err);
         if (docs) {
-          console.log('myPoll username already taken');
+         // console.log('myPoll username already taken');
  //console.log("title: " + docs + 'username already taken');
   res.send(docs);
   //
@@ -79,7 +78,7 @@ Person.find({}, function(err, docs){
   Person.findOne({ name: req.body.user }, function (err, docs) {
     if (err) errorHandler(err);
         if (docs) {
-          console.log('signout '+req.body.signout);
+         // console.log('signout '+req.body.signout);
           docs.signout=req.body.signout;
            docs.save(function (err) {
 if (err) return handleError(err);

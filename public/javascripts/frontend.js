@@ -57,7 +57,7 @@ $(document).ready(function () {
       success: function (data) {
         //update listalert(data);
         $(".polls").empty();
-       console.log(JSON.stringify(data));
+      
         getAll(data);
       }
     });
@@ -65,11 +65,10 @@ $(document).ready(function () {
 
 
   function getAll(data) {
- 
+ data.reverse();
      for (let x = 0; x != data.length - 1; x++) {
           for (let y = 0; y < data[x].polls.length - 1; y++) {
-           $(".polls").append("<a href='/polls/" +data[x].polls[y]._id +"/"+  data[x]._id +"'>" + data[x].polls[y].name + "</a>");
-
+           $(".polls").append("<a href='/polls/" +data[x].polls[y]._id +"/"+  data[x]._id +"?"+ 'hide=' +$("#socialName").text() +"'>" + data[x].polls[y].name + "</a>");
       }
     }
  
@@ -80,13 +79,14 @@ $(document).ready(function () {
 
 
   function getMy(data) {
+    
     // $(".polls").text('My Polls');
     if (data.hasOwnProperty('polls')) {
       if (data.polls.length > 0) {
-        for (let y = 0; y != data.polls.length - 1; y++) {
+        for (let y = data.polls.length - 1; y !=0 ; y--) {
           //console.log("56"+ JSON.stringify(data._id));
          
-          $(".polls").append("<a href='/polls/" + data.polls[y]._id + "/" + data._id + "' >" + data.polls[y].name + "</a>");
+          $(".polls").append("<a href='/polls/" + data.polls[y]._id + "/" + data._id+"?"+ 'hide=' +code($("#socialName").text()) + "' >" + data.polls[y].name + "</a>");
         }
 
         $("#navHome").removeClass('active');
@@ -95,7 +95,9 @@ $(document).ready(function () {
       }
     }
   }
-
+function  code(myString){
+  return  CryptoJS.AES.encrypt(myString, 'secret_key_123');
+}
   $.ajax({
     url: '/autologin',
     type: 'post',

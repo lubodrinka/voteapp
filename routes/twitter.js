@@ -11,7 +11,7 @@ var Strategy = require('passport-twitter').Strategy;
 
 
 
-var trustProxy =false;
+var trustProxy = false;
 /*
 if (process.env.DYNO) {
 
@@ -38,17 +38,17 @@ if (process.env.DYNO) {
 
 passport.use(new Strategy({
 
-    consumerKey: process.env.TWITTER_CONSUMER_KEY,
+  consumerKey: process.env.TWITTER_CONSUMER_KEY,
 
-    consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
+  consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
 
-    callbackURL: '/oauth/twitter/callback',
+  callbackURL: '/oauth/twitter/callback',
 
-    proxy: trustProxy
+  proxy: trustProxy
 
-  },
+},
 
-  function(token, tokenSecret, profile, cb) {
+  function (token, tokenSecret, profile, cb) {
 
     // In this example, the user's Twitter profile is supplied as the user
 
@@ -60,13 +60,13 @@ passport.use(new Strategy({
 
     // providers.
     //
-   // let recipes = JSON.parse(sessionStorage.getItem(this.state.user)) || [];
-   let profilejSOn=(profile.json);
+    // let recipes = JSON.parse(sessionStorage.getItem(this.state.user)) || [];
+    let profilejSOn = (profile.json);
 
-   console.log("§§!"+profile.displayName);
+    // console.log("§§!"+profile.displayName);
 
-   console.log(profile.photos[0].value);
-//sessionStorage.setItem(1,  JSON.stringify({Name:profilejSOn.displayName ,Photo:profilejSOn.photos[0].value}));
+    // console.log(profile.photos[0].value);
+    //sessionStorage.setItem(1,  JSON.stringify({Name:profilejSOn.displayName ,Photo:profilejSOn.photos[0].value}));
     return cb(null, profile);
 
   }));
@@ -93,7 +93,7 @@ passport.use(new Strategy({
 
 // and deserialized.
 
-passport.serializeUser(function(user, cb) {
+passport.serializeUser(function (user, cb) {
 
   cb(null, user);
 
@@ -101,7 +101,7 @@ passport.serializeUser(function(user, cb) {
 
 
 
-passport.deserializeUser(function(obj, cb) {
+passport.deserializeUser(function (obj, cb) {
 
   cb(null, obj);
 
@@ -137,90 +137,79 @@ app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveU
 app.use(passport.initialize());
 
 app.use(passport.session());
-    app.get('/', function (req, res) {
-        console.log("home send");
-        res.render('home', { user: req.user });
-  
+app.get('/', function (req, res) {
+  // console.log("home send");
+  res.render('home', { user: req.user });
+
+});
+
+
+
+app.get('/login',
+
+  function (req, res) {
+
+    console.log('ENV');
+
+    console.log(process.env);
+
+    console.log('Headers:');
+
+    console.log("!req.headers!" + req.headers);
+
+    res.render('login');
+
+  });
+
+app.get('/login/twitter',
+
+  passport.authenticate('twitter')
+);
+
+app.get('/oauth/twitter/callback',
+
+  passport.authenticate('twitter', { failureRedirect: '/login' }), function (req, res) {
+
+    Person.findOne({ ip: req.ip }, function (err, docs) {
+      if (err) errorhandler(err);
+      if (docs) {
+
+        docs.signout = true;
+        docs.save(function (err) {
+          if (err) return handleError(err);
+        });
+      } else {
+
+        const kitty = new Person({ signout: true, ip: req.ip, social: 'twitter', name: req.user._json.screen_name, url: req.user.photos[0].value, id: req.user.id });
+        kitty.save().then(() => console.log('new Person save' + docs));
+
+
+      }
+
+
     });
+    res.redirect('/');
+  });
 
 
+app.get('/profile',
 
-    app.get('/login',
+  require('connect-ensure-login').ensureLoggedIn(),
 
-        function (req, res) {
+  function (req, res) {
 
-            console.log('ENV');
+    console.log("profile send");
+    res.render('profile', { user: req.user });
 
-            console.log(process.env);
-
-            console.log('Headers:');
-
-            console.log("!req.headers!"+req.headers);
-         
-            res.render('login');
-
-        });
-
-
-
-   app.get('/login/twitter',
-
-        passport.authenticate('twitter')
-    );
-
-
-
-    app.get('/oauth/twitter/callback',
-
-        passport.authenticate('twitter', { failureRedirect: '/login' }),  function (req, res) {
-
-        
-            console.log(req.ip);
-           console.log(req.user.id);
-            console.log("login send"+req.user.displayName);
-
-            Person.findOne({ ip: req.ip }, function (err, docs) {
-          if (err) errorhandler(err);
-              if (docs) {
-       //console.log("title: " + docs + 'username already taken');
-            //res.send('username already taken');
-            docs.signout=true;
-            docs.save(function (err) {
-if (err) return handleError(err);
- });
-          } else {
-         
-            const kitty = new Person({signout:true,ip: req.ip, social:'twitter',name: req.user._json.screen_name, url:req.user.photos[0].value,id:req.user.id });
-            kitty.save().then(() => console.log('new Person save'+docs));
-  
-
-        }
-          
-           
-        });
-       res.redirect('/');
-        });
-
-
-
-    app.get('/profile',
-
-        require('connect-ensure-login').ensureLoggedIn(),
-
-        function (req, res) {
-           
-            console.log("profile send");
-            res.render('profile', { user: req.user });
-
-        });
+  });
 
 
 
 
- 
 
 
 
 
-    module.exports =app;
+
+module.exports = app;
 
