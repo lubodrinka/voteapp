@@ -42,7 +42,7 @@ findall();
 
   //
 
-  Person.findOne({ name: req.body.user }, function (err, docs) {
+  Person.findOne({ _id: req.body.user }, function (err, docs) {
     if (err) errorHandler(err);
         if (docs) {
          // console.log('myPoll username already taken');
@@ -75,7 +75,7 @@ Person.find({}, function(err, docs){
   //
 
 
-  Person.findOne({ name: req.body.user }, function (err, docs) {
+  Person.findOne({ _id: req.body.user }, function (err, docs) {
     if (err) errorHandler(err);
         if (docs) {
          // console.log('signout '+req.body.signout);

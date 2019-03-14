@@ -2,47 +2,42 @@ var express = require('express');
 var router = express.Router();
 var bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
-var CryptoJS = require("crypto-js");
+
 
  
 
 app.post('/newpoll', urlencodedParser, function (req, res, next) {
 
     //console.log(JSON.stringify(req.body));
-    let Name = req.body.Name;
+    let pollName = req.body.pollName;
     let graphVal = req.body.graphVal;
-    let User = req.body.User;
+    let User_id = JSON.parse(req.body.User_id);
     // res.json({ working: (req.body) });
     //find one name and then add create name to 
-    
-    Person.findOne({ name: User }, function (err, docs) {
+    //console.log(User_id);
+    Person.findOne({ _id: User_id }, function (err, docs) {
         if (err) errorhandler(err);
         if (docs) {
             var Polls = docs.polls;
-            Polls.push({ name: Name, graphValue: [] });//console.log(Polls);
+            Polls.push({ name: pollName, graphValue: [] });//console.log(Polls);
             for (let x = 0; x <= graphVal.length - 1; x++) {
                 Polls[Polls.length - 1].graphValue.push({ name: graphVal[x], graphValue: 0 });
-               
-             
-
-            } //console.log(Polls[Polls.length - 1]._id);
+                           } //console.log(Polls[Polls.length - 1]._id);
             docs.save(function (err, docsaved) {
                 if (err) console.log(err);
                 //console.log(Polls[Polls.length - 1]);
-                res.redirect('/polls/'+Polls[Polls.length - 1]._id+"/"+docs._id);
+                res.redirect('/polls/'+Polls[Polls.length - 1]._id+"/"+docs._id+"/?hide="+JSON.stringify(User_id));
             });
             // res.send(Polls[Polls.length - 1]);
-            // docs.polls.Name.push(graphVal); $inc:{graphValue: 1}
-
+           
         } else {
             const kitty = new Person({ ip: 0, social: 'home', name: 'unregistered', url: '', id: 1, });
             kitty.save().then(() => console.log('new Person save' + docs));
         }
     });
 
-
 }).get('/polls/:sid/:mid',urlencodedParser,   function (req, res, next) {
-let sendName =req.query.hide;
+let send_id =req.query.hide;
 
     var color=[];
     let subID = req.params.sid;
@@ -74,7 +69,7 @@ let sendName =req.query.hide;
         if (docs) {
            
      var subdoc = docs.polls.id(subID);
-    // console.log(docs.name);
+     //console.log(docs);
      var voteButtons ="";
      if(subdoc===null) return res.send('<h1>was deleted   <a href="/">Home</a><h1>');
          let subdates = subdoc.graphValue;    
@@ -83,17 +78,11 @@ let sendName =req.query.hide;
 config.data.labels.push(subdates[x].name);
 voteButtons+=' <input type="radio" class="votebutton" name="votebutton" value="'+subdates[x]._id+'" >'+subdates[x].name+'<br>';
    
-   }
- let encrypt=  CryptoJS.AES.encrypt(docs.name, 'secret_key_123');
- console.log("plain   "+encrypt);
-let visibledelete = '';console.log("plain   "+sendName.toString());
-var bytes  = CryptoJS.AES.decrypt(sendName.toString(), 'secret_key_123');
-
-var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+   } let visibledelete = '';
 
 
-console.log("plain   "+plaintext);
-     if(docs.name!==plaintext ){ visibledelete = ' disabled ';}   
+
+     if(docs._id.toString()!==JSON.parse(send_id) ){ visibledelete = ' disabled ';}   
 let deleteButton ='<a role="button" type="button" class="btn-group btn btn-danger'+ 
 visibledelete+'" href="/delete/'+subID+'/'+mainID+'">Delete poll</a>';        
 
@@ -193,8 +182,8 @@ docs.save(function (err) {
 let subID = req.params.sid;
 let mainID = req.params.mid;
 let votebutton_id=req.query.votebutton;
-console.log(votebutton_id);
-console.log( typeof subID==="undefined" || typeof  votebutton_id==="undefined");
+//console.log(votebutton_id);
+//console.log( typeof subID==="undefined" || typeof  votebutton_id==="undefined");
 if((typeof subID==="undefined" || typeof  votebutton_id==="undefined")===false){
 Person.findById(mainID, function(err, docs){
                
@@ -203,10 +192,10 @@ Person.findById(mainID, function(err, docs){
        
  var subdoc = docs.polls.id(subID).graphValue.id(votebutton_id);
  var pollName = "";
-   console.log("187"+ subdoc);
+  // console.log("187"+ subdoc);
 if(subdoc){
     pollName =  subdoc.name;// $inc:{graphValue: 1};
-  console.log( subdoc.graphValue);
+  //console.log( subdoc.graphValue);
 subdoc.graphValue++;
  docs.save(function (err) {
 if (err) return handleError(err);

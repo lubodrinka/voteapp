@@ -10,7 +10,7 @@ $(document).ready(function () {
     $.ajax({
       type: "POST",
       url: 'signout',
-      data: { signout: false, user: $("#socialName").text() },
+      data: { signout: false, user:$('#modalUser').attr("value") },
       dataType: 'json',
       success: 'success'
 
@@ -35,7 +35,7 @@ $(document).ready(function () {
       url: '/mypolls',
       type: 'post',
       dataType: 'json',
-      data: { user: $("#socialName").text() },
+      data: { user: $('#modalUser').attr("value") },
       success: function (data) {
          $(".polls").empty();
         //update listalert(data);
@@ -68,7 +68,7 @@ $(document).ready(function () {
  data.reverse();
      for (let x = 0; x != data.length - 1; x++) {
           for (let y = 0; y < data[x].polls.length - 1; y++) {
-           $(".polls").append("<a href='/polls/" +data[x].polls[y]._id +"/"+  data[x]._id +"?"+ 'hide=' +code($("#socialName").text())+"'>" + data[x].polls[y].name + "</a>");
+           $(".polls").append("<a href='/polls/" +data[x].polls[y]._id +"/"+  data[x]._id +"?"+ 'hide=' +code($('#modalUser').attr("value")) +"'>" + data[x].polls[y].name + "</a>");
       }
     }
  
@@ -86,7 +86,7 @@ $(document).ready(function () {
         for (let y = data.polls.length - 1; y !=0 ; y--) {
           //console.log("56"+ JSON.stringify(data._id));
          
-          $(".polls").append("<a href='/polls/" + data.polls[y]._id + "/" + data._id+"?"+ 'hide=' +code($("#socialName").text()) + "' >" + data.polls[y].name + "</a>");
+          $(".polls").append("<a href='/polls/" + data.polls[y]._id + "/" + data._id+"?"+ 'hide=' +code($('#modalUser').attr("value")) + "' >" + data.polls[y].name + "</a>");
         }
 
         $("#navHome").removeClass('active');
@@ -96,7 +96,10 @@ $(document).ready(function () {
     }
   }
 function  code(myString){
-  return  CryptoJS.AES.encrypt(myString, 'secret_key_123');
+ // return myString;
+ console.log($('#modalUser').attr("value"));
+ return JSON.stringify(myString)
+   ;
 }
   $.ajax({
     url: '/autologin',
@@ -107,7 +110,9 @@ function  code(myString){
 
       if (data !== "") {
 
-        $('#modalUser').attr("value", data.name);
+        $('#modalUser').attr("value", JSON.stringify(data._id)  ); 
+         $("#socialName").text(data.name);
+          $("#socialPhoto").attr("src", data.url);
         if (Array.isArray(data)) {
           // console.log("31" + JSON.stringify(data));
           $('#signin').show();
@@ -119,9 +124,8 @@ function  code(myString){
           $('#signin').hide();
            $('#signout').show();
             $('#myPolls').show();
-          $('#modalUser').attr("value", data.name);
-          $("#socialName").text(data.name);
-          $("#socialPhoto").attr("src", data.url);
+        
+        
           // console.log("50" + JSON.stringify(data));
           // console.log("54"+(data.polls.length+ data.polls ));
 
