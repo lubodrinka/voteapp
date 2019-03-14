@@ -68,7 +68,7 @@ $(document).ready(function () {
  data.reverse();
      for (let x = 0; x != data.length - 1; x++) {
           for (let y = 0; y < data[x].polls.length - 1; y++) {
-           $(".polls").append("<a href='/polls/" +data[x].polls[y]._id +"/"+  data[x]._id +"?"+ 'hide=' +$("#socialName").text() +"'>" + data[x].polls[y].name + "</a>");
+           $(".polls").append("<a href='/polls/" +data[x].polls[y]._id +"/"+  data[x]._id +"?"+ 'hide=' +code($("#socialName").text())+"'>" + data[x].polls[y].name + "</a>");
       }
     }
  
