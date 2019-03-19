@@ -1,33 +1,38 @@
 body {
   margin: 0;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  padding: 10vh;
+  padding: 50px;
+  background-image: linear-gradient(to right, #034378, #2d4e68);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 main {
-  padding:0 5vh 0  0;
+  padding: 0 5vh 0 0;
 }
 
-a {
-  color: #00B7FF;
+.card>a {
+  color: rgb(9, 137, 184);
+
 }
 
 .card {
   max-width: 20vw;
   max-height: 8vh;
   /* Add shadows to create the "card" effect */
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
+  /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);*/
   transition: 0.3s;
   display: inline-flex;
   align-items: baseline;
   color: floralwhite;
   margin: 10px 150px 10px 150px;
+
 }
 
 
 /* On mouse-over, add a deeper shadow */
-.card:hover {
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+.card>a:hover {
+  filter: drop-shadow(1px 1px 1px rgb(253, 252, 252));
 
 }
 
@@ -56,28 +61,16 @@ nav {
 
 }
 
-.modal-body>form * {
-  margin: 5px;
-}
-
-.ModalPollsinputs>* {
-  display: block;
 
 
-}
+@import url('https://fonts.googleapis.com/css?family=Gaegu|Gloria+Hallelujah|Great+Vibes|Indie+Flower|Lato|Open+Sans|Oswald|Permanent+Marker|Montserrat');
 
-@import url('https://fonts.googleapis.com/css?family=Gaegu|Gloria+Hallelujah|Great+Vibes|Indie+Flower|Lato|Open+Sans|Oswald|Permanent+Marker');
-
-.polls * {
-  width: 70%;
-  font-size: 22pt;
-  font-family: 'Permanent Marker', cursive;
-  background-color: lightgrey;
+.polls>.container1 {
+  width: 200px;
+  height: 60px;
   /* Green */
-  border: 2px solid #555555;
-  border-radius: 20%;
-  color: black;
-  padding: 5px 8px;
+  border: 2px solid #000000;
+  color: #e7e7e7;
   text-align: center;
   text-decoration: none;
   margin: 10px 10px;
@@ -85,49 +78,274 @@ nav {
   /* Safari */
   transition-duration: 0.4s;
   cursor: pointer;
-  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6),
-    3px 4px 12px rgba(0, 0, 0, 0.5),
-    4px 6px 15px rgba(0, 0, 0, 0.4),
-    5px 8px 18px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.2);
+  background-color: #1e1b26;
+  margin: 60px auto 0 auto;
+  box-shadow: 5px 5px 115px -14px black;
+  border-radius: 5px;
+  position: relative;
+  text-overflow: clip;
+  word-wrap: break-word;  -webkit-transition: height 1s ease-out 0.2s; /* For Safari 3.1 to 6.0 */
+  transition: height 1s ease-out 0.2s;
+}
+.polls> .container1:hover {
+  height: 200px;
 
+}
+
+.polls>a>p {
+  margin: 10px 10px;
+  font-size: 18px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, 1),
+    3px 3px 3px rgba(0, 0, 0, 1);
+  text-overflow: clip;
+}
+
+.polls>a>.comment {
+
+ 
+  font-size: 12px;
+  font-weight: 400;
+  font-family: 'Open Sans';
+  width: 100%;
+  word-wrap: break-word;
+  text-overflow: ellipsis;
+  opacity: 0;
+  position: absolute;
+  bottom: 0px;
+  left:0px;
+}
+
+.polls>a:hover .comment {
+  animation-fill-mode: forwards;
+  -webkit-animation-fill-mode: forwards;
+  animation-name: example;
+  animation-duration: 1s;
+  animation-timing-function: ease-in;
+  animation-delay: 0.2s;
+  animation-iteration-count: 1;
+  animation-direction: normal;
 
 }
 
 
 
+@-webkit-keyframes example {
+  0% {
+    background-color: black;
+   color: #e7e7e7
+  }
+
+  100% {
+    background-color:floralwhite;
+    color: #000000;
+    opacity:1 ;
+  }
+}
+
+
+
+/*
 a:active,
 a:hover {
   outline: 0;
   border-color: rgb(154, 47, 255);
   text-decoration-line: none;
 }
-
+*/
 .polls {
-  padding: 100px;
-  border: 1px solid rgb(82, 6, 6);
   display: flex;
   justify-content: center;
-  flex-flow: column;
+  flex-flow: wrap;
+  margin-top: 50px;
+}
+
+/*hlasovanie*/
+#myChart {
+  grid-area: vote-myChart;
+}
+
+#votePanel {
+  grid-area: votePanel;
+}
+
+#footBtn {
+  grid-area: buttons;
 }
 
 .mainContent {
-display: inline-flex;
-flex-flow: row;
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 400px 200px;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "vote-myChart votePanel"
+    "buttons buttons";
+
 }
-#formVote{
+
+
+#votePanel {
+  width: 200px;
+  font-family: 'Great Vibes', cursive;
+  font-size: 14pt;
   padding: 15px;
-    box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.6),
+  box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.6),
     2px 2px 12px rgba(0, 0, 0, 0.5),
     3px 3px 15px rgba(0, 0, 0, 0.4),
     3px 3px 18px rgba(0, 0, 0, 0.3);
 }
 
-#formVote input{
-  
-   margin:7px;
+#votePannel>form>input,
+#voteComment>p {
+  filter: drop-shadow(2px 2px 8px rgba(0, 0, 0, 0.6));
+  margin-top: 15px;
+
+}
+.btn{
+  font-family: 'Lato', Courier, monospace;
 }
 
-input[type=radio]{
- margin:50px;
+#footBtn {
+  filter: drop-shadow(2px 2px 8px rgba(0, 0, 0, 0.6));
+  margin-top: 15px;
+  text-align: center;
+}
+
+#voteComment>p {
+  margin-top: 10px;
+  width: 80%;
+  word-wrap: break-word;
+  text-overflow: ellipsis;
+  font-size: 8pt;
+  text-transform: lowercase;
+  text-align: start;
+color:#fff;
+text-shadow: 0 2px rgba(0, 0, 0, 0.4),
+0 4px rgba(0, 0, 0, 0.4),
+0 6px rgba(0, 0, 0, 0.4),
+0 8px rgba(0, 0, 0, 0.4),
+}
+
+#VoteformAddoption>* {
+  display: block;
+  margin-top: 10px;
+ width: 100px;
+}
+
+input[type=radio] {
+  margin: 12px;
   color: blue;
+  text-anchor: end;
+}
+
+.shaddowbtn {
+  border: 0.5px solid;
+  padding: 1px;
+  box-shadow: 2px 2px 8px rgba(255, 255, 255, 0.6),
+    3px 3px 12px rgba(0, 0, 0, 0.5),
+    4px 4px 15px rgba(0, 0, 0, 0.4);
+   
+  text-align: center;
+}
+#formVoteSubmit{
+  margin-top: 10px;
+}
+/*modal*/
+.modal-body>form * {
+  margin: 5px;
+
+}
+
+#addValueOptiontoModal {
+  width: 200px;
+}
+
+.ModalPollsinputs>* {
+  margin-top: 5px;
+
+}
+
+.modal-body>*,
+.modal-footer>* {
+  color: rgb(119, 33, 199);
+  font-family: 'Permanent Marker', cursive;
+  filter: drop-shadow(2px 2px 8px rgba(0, 0, 0, 0.6));
+
+}
+
+.modal-title
+  {
+  margin-top: 10px;
+  font-family: 'Gaegu', cursive;
+  filter: drop-shadow(2px 2px 8px rgba(0, 0, 0, 0.6));
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.6),
+    2px 2px 2px rgba(0, 0, 0, 0.5),
+    3px 3px 3px rgba(0, 0, 0, 0.4),
+    4px 4px 4px rgba(0, 0, 0, 0.3);
+}
+
+.modal-polls {
+  grid-area: modal-polls;
+}
+
+.ModalPollsinputs {
+  grid-area: ModalPollsinputs;
+}
+
+.modal-textarea {
+  grid-area: modal-textarea;
+}
+
+.newpoll-title {
+  grid-area: newpoll-title;
+}
+
+.newpoll-footer {
+  grid-area: newpoll-footer;
+}
+
+.modal-container {
+  display: grid;
+  grid-gap: 1em;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "newpoll-title  modal-textarea"
+    "modal-article  modal-textarea"
+    "ModalPollsinputradio modal-textarea"
+    "newpoll-footer modal-textarea";
+}
+
+.indiefont {
+  font-family: 'Indie Flower', cursive;
+}
+
+.latofont {
+  font-family: 'Lato', sans-serif;
+}
+
+.osansfont {
+  font-family: 'Open Sans', sans-serif;
+}
+
+.oswaldfont {
+  font-family: 'Oswald', sans-serif
+}
+
+.gloriafont {
+  font-family: 'Gloria Hallelujah', cursive;
+}
+
+.fixfont {
+  font-family: 'Permanent Marker', cursive;
+}
+
+.GVfont {
+  font-family: 'Great Vibes', cursive;
+}
+
+.Gfont {
+  font-family: 'Gaegu', cursive;
 }

@@ -1,6 +1,10 @@
 
 
 $(document).ready(function () {
+
+
+
+
   $('#addValueOptiontoModal').click(function (e) {
     e.preventDefault();
     $('.ModalPollsinputs').append("<input  type='text' name='graphVal'>");
@@ -10,7 +14,7 @@ $(document).ready(function () {
     $.ajax({
       type: "POST",
       url: 'signout',
-      data: { signout: false, user_id:code($('#modalUser').attr("value") )},
+      data: { signout: false, user_id: code($('#modalUser').attr("value")) },
       dataType: 'json',
       success: 'success'
 
@@ -22,7 +26,7 @@ $(document).ready(function () {
   });
   $('#signin').click(function (e) {
     $('#signin').hide();
-     });
+  });
   $('#Home').click(function () {
     $("#navMyPolls").removeClass('active');
     $("#navAllPolls").removeClass('active');
@@ -37,7 +41,7 @@ $(document).ready(function () {
       dataType: 'json',
       data: { user_id: code($('#modalUser').attr("value")) },
       success: function (data) {
-         $(".polls").empty();
+        $(".polls").empty();
         //update listalert(data);
         // 
         getMy(data);
@@ -57,7 +61,7 @@ $(document).ready(function () {
       success: function (data) {
         //update listalert(data);
         $(".polls").empty();
-      
+
         getAll(data);
       }
     });
@@ -65,28 +69,42 @@ $(document).ready(function () {
 
 
   function getAll(data) {
- data.reverse();
-     for (let x = 0; x != data.length - 1; x++) {
-          for (let y = 0; y < data[x].polls.length - 1; y++) {
-           $(".polls").append("<a href='/polls/" +data[x].polls[y]._id +"/"+  data[x]._id +"?"+ 'hide=' +code($('#modalUser').attr("value")) +"'>" + data[x].polls[y].name + "</a>");
+    data.reverse();
+    for (let x = 0; x != data.length - 1; x++) {
+      for (let y = 0; y < data[x].polls.length - 1; y++) {
+
+        let tooltip = "";
+        try { tooltip = Boolean(data[x].polls[y].comment) ? data[x].polls[y].comment : ""; } catch (error) {
+        }
+        $(".polls").append("<a class='container1' href=" + encodeURI(/polls/ + data[x].polls[y]._id + "/" + data[x]._id + '?hide=' +
+          code($('#modalUser').attr("value"))) + ' ><p>' + data[x].polls[y].name + '</p><span href="#" class="comment" >' + tooltip + '</span></a>');
       }
     }
- 
     $("#navHome").removeClass('active');
     $("#navMyPolls").removeClass('active');
     $("#navAllPolls").addClass('active');
+
   }
 
 
   function getMy(data) {
-    
+
     // $(".polls").text('My Polls');
     if (data.hasOwnProperty('polls')) {
       if (data.polls.length > 0) {
-        for (let y = data.polls.length - 1; y !=0 ; y--) {
-          //console.log("56"+ JSON.stringify(data._id));
-         
-          $(".polls").append("<a href='/polls/" + data.polls[y]._id + "/" + data._id+"?"+ 'hide=' +code($('#modalUser').attr("value")) + "' >" + data.polls[y].name + "</a>");
+        for (let y = data.polls.length - 1; y != 0; y--) {
+          // console.log("56"+ JSON.stringify(data.polls[y].comment));
+          let tooltip = "";
+          try {
+            tooltip = Boolean(data.polls[y].comment) ? data.polls[y].comment : "";
+          } catch (error) {
+
+          }
+
+          $(".polls").append('<a class="container1" href=' + encodeURI(
+            '/polls/' + data.polls[y]._id + '/' + data._id +
+            '?hide=' + code($('#modalUser').attr('value'))) + ' ><p>' + data.polls[y].name + '</p><span class="comment" >' + tooltip + '</span></a>');
+
         }
 
         $("#navHome").removeClass('active');
@@ -95,11 +113,13 @@ $(document).ready(function () {
       }
     }
   }
-function  code(myString){
 
- return myString?JSON.stringify(myString.replace(/"/g, "")):JSON.stringify("unregistered");
-  
-}
+
+  function code(myString) {
+
+    return myString ? JSON.stringify(myString.replace(/"/g, "")) : JSON.stringify("unregistered");
+
+  }
   $.ajax({
     url: '/autologin',
     type: 'post',
@@ -109,28 +129,29 @@ function  code(myString){
 
       if (data !== "") {
 
-        $('#modalUser').attr("value", Boolean( JSON.stringify(data._id))?JSON.stringify(data._id):"unregistered"  ); 
-         $("#socialName").text(data.name);
-        
+        //console.log(JSON.stringify(data._id)+ Boolean( JSON.stringify(data._id)));
+        $('#modalUser').attr("value", Boolean(JSON.stringify(data._id)) ? JSON.stringify(data._id) : "unregistered");
+        $("#socialName").text(data.name);
+
         if (Array.isArray(data)) {
-       
+
           $('#signin').show();
           $('#signout').hide();
-//          $('#myPolls').hide(); 
+          //          $('#myPolls').hide(); 
           $("#socialPhoto").attr("src", './images/favicon.jpg');
           getAll(data);
 
         } else {
           $('#signin').hide();
-           $('#signout').show();
-           // $('#myPolls').show();
-           $('#modalUser').attr("value", "unregistered");
-        
+          $('#signout').show();
+          // $('#myPolls').show();
+
+
           // console.log("50" + JSON.stringify(data));
           // console.log("54"+(data.polls.length+ data.polls ));
 
           //console.log(data.hasOwnProperty('polls'));
-  $("#socialPhoto").attr("src", data.url);
+          $("#socialPhoto").attr("src", data.url);
           getMy(data);
         }
       } else {
@@ -141,17 +162,6 @@ function  code(myString){
       }
     }
   });
+  
+});
 
-});/*
-
-                       $(document).ready(function () {
-                       $("#formVoteSubmit").click(function () {
-                           var IsChecked = $(".votebutton").is(":checked");
-                        if(!IsChecked){alert("select something");}
-                        var votedIpAndUser=JSON.stringify(votedIpAndUser);
-                         var userip= JSON.stringify(req.ip);
-                         var mainID= JSON.stringify(mainID); 
-                        if(votedIpAndUser.includes(mainID)|| votedIpAndUser.includes(userip))
-                        {alert("You have already vote");}
-                              });
-                        });*/

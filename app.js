@@ -23,8 +23,8 @@ var app = express();
 const mongoose = require('mongoose');
 let Schema= mongoose.Schema;
 mongoose.connect(process.env.MONGO_DB, {useNewUrlParser: true});
-global.GraphsValuesSchema = new Schema({ name: String, graphValue:Number});
-global.GraphsSchema = new Schema({ name: String, graphValue:[GraphsValuesSchema] , votedIpAndUser:[String] } );
+global.GraphsValuesSchema = new Schema({ name: String, graphValue: { type: Number, default: 0 }});
+global.GraphsSchema = new Schema({ name: String, graphValue:[GraphsValuesSchema] , votedIpAndUser:[String], type: String, comment:String } );
 global.Person = mongoose.model('VoteAPP', new Schema ({signout:Boolean,ip:String,social:String, name: String, url:String,id:Number, polls:[GraphsSchema] }, {timestamps: true}));
 //https://stackoverflow.com/a/54588517/4664725
 
