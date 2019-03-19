@@ -55,13 +55,14 @@ app.post('/newpoll', urlencodedParser, function (req, res, next) {
                 datasets: [{
                     data: [],
                     backgroundColor: '',
-                    label: String,
+                    label: [],
                     borderColor: 'blue',
                     borderWidth: 1,
                 }],
                 labels: []
             },
             options: {
+               legend:{display:true},
                 responsive: false,
                 title: {
                     display: true,
@@ -84,7 +85,7 @@ app.post('/newpoll', urlencodedParser, function (req, res, next) {
                 for (let x = 0; x <= subdates.length - 1; x++) {
                     config.data.datasets[0].data.push(subdates[x].graphValue);
                     config.data.labels.push(subdates[x].name);
-
+                    config.data.datasets[0].label.push(subdates[x].name);
                     voteButtons += ' <input type="radio" class="votebutton" name="votebutton" value="' + subdates[x]._id + '" >' + subdates[x].name + '<br>';
 
                 } let visibledelete = '';
@@ -120,7 +121,7 @@ app.post('/newpoll', urlencodedParser, function (req, res, next) {
                 console.log(subdocpolls);
                 config.options.title.text = subdocpolls.name;
                 config.type = subdocpolls.type;
-
+config.options.legend.display =subdocpolls.type!=="bar"?true:false;
 
                 if (subdocpolls.votedIpAndUser.includes(user_id) || votedIpAndUser.includes(userip)) {
                     subdocpolls.votedIpAndUser.push(user_id);
