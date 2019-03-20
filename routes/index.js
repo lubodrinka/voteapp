@@ -88,23 +88,59 @@ router.post('/autologin', function (req, res, next) {
 
 
 
+}).post('/signout', function (req, res, next) {
+
+
+
+  
+
+ // console.log(JSON.stringify(req.body));
+
+
+
+  Person.findOne({ _id: JSON.parse(req.body.user_id) }, function (err, docs) {
+
+    if (err) errorHandler(err);
+
+    if (docs) {
+
+      // console.log('signout '+req.body.signout);
+
+      docs.signout = req.body.signout;
+
+      docs.save(function (err) {
+
+        if (err) return handleError(err);
+
+        res.redirect('back');
+
+      });
+
+      //console.log("title: " + docs + 'username already taken');
+
+
+
+      //
+
+    }
+
+  });
+
 }).get('/search', function (req, res, next) {
 
 
-  console.log(JSON.stringify(req.body));
-  console.log(JSON.stringify(req.query));
+  
   let search = req.query.search;
-  console.log(search);
+
   Person.find({}, function (err, docs) {
     if (err) errorHandler(err);
     if (docs) {
       // 
       let newdoc=[];
 
-      for (x = 0; x < docs.length ; x++) {
-     
-                 
-        for (y = 0; y < docs[x].polls.length ; y++) {           
+      for (let x = 0; x < docs.length ; x++) {
+                      
+        for (let y = 0; y < docs[x].polls.length ; y++) {           
             
             let name = docs[x].polls[y].name; 
 
