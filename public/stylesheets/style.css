@@ -6,7 +6,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+#deleteMsg{
+  margin: 0 auto;
+  text-align: center;
+}
 main {
   padding: 0 5vh 0 0;
 }
@@ -157,8 +160,9 @@ a:hover {
 */
 .polls {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   flex-flow: wrap;
+
   margin-top: 50px;
 }
 
@@ -269,7 +273,8 @@ input[type=radio] {
 }
 
 .modal-body>*,
-.modal-footer>* {
+.modal-footer>*,.ModalPollsinputs>* ,.modal-textarea>textarea
+ {
   color: rgb(119, 33, 199);
   font-family: 'Permanent Marker', cursive;
   filter: drop-shadow(2px 2px 8px rgba(0, 0, 0, 0.6));

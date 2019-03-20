@@ -8,7 +8,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 app.post('/newpoll', urlencodedParser, function (req, res, next) {
 
-    console.log(JSON.stringify(req.body));
+    // console.log(JSON.stringify(req.body));
     let pollName = req.body.pollName;
     let graphVal = req.body.graphVal;
     let graphType = req.body.graphType;
@@ -62,7 +62,7 @@ app.post('/newpoll', urlencodedParser, function (req, res, next) {
                 labels: []
             },
             options: {
-               legend:{display:true},
+                legend: { display: true },
                 responsive: false,
                 title: {
                     display: true,
@@ -94,7 +94,7 @@ app.post('/newpoll', urlencodedParser, function (req, res, next) {
                 //console.log(docs.polls);
                 if (docs._id.toString() !== mainID) { visibledelete = ' disabled '; }
                 let votedIpAndUser = subdoc.votedIpAndUser;
-                let comment = subdoc.comment||"";
+                let comment = subdoc.comment || "";
                 let deleteButton = '<a role="button" type="button" class="btn-group btn btn-danger\n' +
                     visibledelete + '" href="/delete/' + subID + '/' + mainID + '">Delete poll</a>';
 
@@ -109,19 +109,19 @@ app.post('/newpoll', urlencodedParser, function (req, res, next) {
                         //https://www.paulirish.com/2009/random-hex-color-code-snippets/<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script><script src="https://d3js.org/d3-color.v1.min.js"></script><script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
                     }
                 } var userip = req.ip; let addoption = true;
-                var visibleAddOption= 'visibility: visible;';
+                var visibleAddOption = 'visibility: visible;';
                 var user_id = (JSON.parse(send_id));
                 if (user_id === "unregistered") {
-                     user_id = userip; 
-                     addoption = false;
-                     visibleAddOption= 'visibility: hidden;';
-                     }
+                    user_id = userip;
+                    addoption = false;
+                    visibleAddOption = 'visibility: hidden;';
+                }
                 var subdocpolls = docs.polls.id(subID);
                 var alreadyVoted = false;
                 console.log(subdocpolls);
                 config.options.title.text = subdocpolls.name;
                 config.type = subdocpolls.type;
-config.options.legend.display =subdocpolls.type!=="bar"?true:false;
+                config.options.legend.display = subdocpolls.type !== "bar" ? true : false;
 
                 if (subdocpolls.votedIpAndUser.includes(user_id) || votedIpAndUser.includes(userip)) {
                     subdocpolls.votedIpAndUser.push(user_id);
@@ -136,21 +136,21 @@ config.options.legend.display =subdocpolls.type!=="bar"?true:false;
                             '<script src="/javascripts/jquery-3.3.1.min.js" type="text/javascript"> </script>' +
                             '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">' +
                             '<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>' +
-                            '<script src="/javascripts/Chart.min.js"></script>'+
-                            '<main>'+
+                            '<script src="/javascripts/Chart.min.js"></script>' +
+                            '<main>' +
                             '<div class="mainContent">' +
-                            '<canvas height="400" width="400" id="myChart"></canvas>' +                            
-                            '<aside id="votePanel">'+
+                            '<canvas height="400" width="400" id="myChart"></canvas>' +
+                            '<aside id="votePanel">' +
                             '<form   id="formVote" method="get" action="/vote/' + subID + '.' + mainID + '.' + JSON.parse(send_id) + '" >\n' +
-                            '<div>' + (voteButtons) + '</div>\n' +                            
+                            '<div>' + (voteButtons) + '</div>\n' +
                             '<input id="formVoteSubmit" class="btn btn-primary shaddowbtn" value="send vote" type="submit">\n' +
-                            '</form>'+
-                            '<form style="'+visibleAddOption+'" id="VoteformAddoption" method="post" action="/addvote/' + subID + '.' + mainID + '.' + JSON.parse(send_id) + '">'+
+                            '</form>' +
+                            '<form style="' + visibleAddOption + '" id="VoteformAddoption" method="post" action="/addvote/' + subID + '.' + mainID + '.' + JSON.parse(send_id) + '">' +
                             '<input id="addOption" type="text" class="osansfont" placeholder="addoption" name="addVote" >' +
-                            '<input id="formAddVoteSubmit" class="btn btn-info shaddowbtn" value="Add vote" type="submit">'+
-                            '</form>'+
-                            '<div id="voteComment"><p>'+comment+'</p></div>' +                            
-                            '</aside>'+
+                            '<input id="formAddVoteSubmit" class="btn btn-info shaddowbtn" value="Add vote" type="submit">' +
+                            '</form>' +
+                            '<div id="voteComment"><p>' + comment + '</p></div>' +
+                            '</aside>' +
                             '<div id="footBtn" class="btn-group btn-group-justified">\n' +
                             '<a role="button" class="btn-group btn-primary" href="/">Home</a> \n' +
                             '<a role="button" rel="me" id="tweet-quote" class="btn-group btn-info twitter-share-button" target="_blank" href="" >Share</a>\n' +
@@ -206,7 +206,20 @@ config.options.legend.display =subdocpolls.type!=="bar"?true:false;
                 if (subdoc) { pollName = subdoc.name; subdoc.remove(); }
                 docs.save(function (err) {
                     if (err) return handleError(err);
-                    res.send('<h2>' + docs.name + ' the poll ' + pollName + ' was removed       <a href="/">Home</a></h2>');
+                    res.format({
+                        html: function () {
+                            res.send('<link href="/stylesheets/style.css" rel="stylesheet"></link>' +
+                                '<script src="/javascripts/jquery-3.3.1.min.js" type="text/javascript"> </script>' +
+                                '<body onload="load()" > <div    id="deleteMsg" ><h2>' + docs.name + ', the poll ' + pollName +
+                                ' was succesfully removed       <a  href="/">Home</a></h2></div></body>' +
+                                '<script ">' +
+                                'function load() {' +
+                                ' setTimeout( function (){' +
+                                'window.location.href="/"   ;},3000);' +
+                                '}' +
+                                '</script>');
+                        }
+                    });
                 });
             }
         });
@@ -218,12 +231,12 @@ config.options.legend.display =subdocpolls.type!=="bar"?true:false;
 }).get('/vote/:sid.:mid.:userid', function (req, res, next) {
 
     //res.json({id:req.params, query:req.query.votebutton});
-    console.log(JSON.stringify(req.params));
+    //console.log(JSON.stringify(req.params));
     let subID = req.params.sid;
     let mainID = req.params.mid;
     let user_id = req.params.userid;
     let votebutton_id = req.query.votebutton;
-    console.log(user_id);
+    //console.log(user_id);
     //console.log( typeof subID==="undefined" || typeof  votebutton_id==="undefined");
     if ((typeof subID === "undefined" || typeof votebutton_id === "undefined") === false) {
         Person.findById(mainID, function (err, docs) {
@@ -262,44 +275,44 @@ config.options.legend.display =subdocpolls.type!=="bar"?true:false;
 
 }).post('/addvote/:sid.:mid.:userid', function (req, res, next) {
 
-  
-  console.log(JSON.stringify(req.params));
 
- console.log(JSON.stringify(req.body));
- let subID = req.params.sid;
- let mainID = req.params.mid;
- let user_id = req.params.userid;
- let addVote = req.body.addVote;
- console.log(addVote);
- //console.log( typeof subID==="undefined" || typeof  votebutton_id==="undefined");
- if ((typeof subID === "undefined" || typeof addVote === "undefined") === false) {
-     Person.findById(mainID, function (err, docs) {
+    console.log(JSON.stringify(req.params));
 
-         if (err) errorHandler(err);
-         if (docs) {
-             var subdocpolls = docs.polls.id(subID).graphValue;
-            console.log( JSON.stringify(subdocpolls));
-            
-        
+    console.log(JSON.stringify(req.body));
+    let subID = req.params.sid;
+    let mainID = req.params.mid;
+    let user_id = req.params.userid;
+    let addVote = req.body.addVote;
+    console.log(addVote);
+    //console.log( typeof subID==="undefined" || typeof  votebutton_id==="undefined");
+    if ((typeof subID === "undefined" || typeof addVote === "undefined") === false) {
+        Person.findById(mainID, function (err, docs) {
 
-             if (subdocpolls) {
-                 subdocpolls.push({name:addVote});// $inc:{graphValue: 1};
-                 //forbid vote again
-                 console.log("187"+subdocpolls);
-          
-                    
-                     docs.save(function (err) {
-                         if (err) return handleError(err);
-                     });
-             
+            if (err) errorHandler(err);
+            if (docs) {
+                var subdocpolls = docs.polls.id(subID).graphValue;
+                console.log(JSON.stringify(subdocpolls));
 
 
-                 res.redirect('back');
-                 //res.send('<h2>'+docs.name +' the poll value '+ pollName+' was updated       <a href="/">Home</a></h2>' );
 
-             }
-         }
-     });
-}
+                if (subdocpolls) {
+                    subdocpolls.push({ name: addVote });// $inc:{graphValue: 1};
+                    //forbid vote again
+                    console.log("187" + subdocpolls);
+
+
+                    docs.save(function (err) {
+                        if (err) return handleError(err);
+                    });
+
+
+
+                    res.redirect('back');
+                    //res.send('<h2>'+docs.name +' the poll value '+ pollName+' was updated       <a href="/">Home</a></h2>' );
+
+                }
+            }
+        });
+    }
 });
 module.exports = router;
