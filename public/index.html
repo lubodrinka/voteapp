@@ -12,7 +12,7 @@
   <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
       <div class="navbar-header">
-        <a class="navbar-brand" href="#">WebSiteName</a>
+        <p class="navbar-brand" >Welcome</p>
       </div>
       <ul class="nav navbar-nav">
         <li id="navHome" class="active"><a id="Home" href="/">Home</a></li>
@@ -28,12 +28,11 @@
           </div>
         </li>
         <li>
-          <form class="navbar-form navbar-right" action="/search">
-            <div class="form-group">
-              <input type="text" class="form-control" placeholder="Search">
-            </div>
-            <button type="submit" class="btn btn-default">Submit</button>
-          </form>
+
+          <div class="form-group navbar-form navbar-right">
+            <input id="searchInput" name="search" type="text" class="form-control" placeholder="Search">
+            <button id="searchSubmit" type="submit" class="btn btn-default">Submit</button>
+          </div>
         </li>
       </ul>
 
@@ -41,11 +40,11 @@
   </nav>
 </header>
 
-<body >
+<body>
 
   <main>
     <br>
-<div class="polls"></div>
+    <div class="polls"></div>
 
 
 
@@ -65,17 +64,17 @@
               <div class="modal-container">
                 <div class=newpoll-title>
                   <p>Name of Poll.</p>
-                  <input type="text" name="pollName">
+                  <input type="text" name="pollName"  required="required">
                 </div>
 
 
                 <div class="modal-article">
                   <div class="ModalPollsinputs">
                     <p>Values of Poll.</p>
-                    <input id="voteinput" type="text" name="graphVal">
-                    <input type="text" name="graphVal">
+                    <input id="voteinput" type="text" name="graphVal"  required="required">
+                    <input type="text" name="graphVal"  required="required">
                   </div>
-                  <button class="btn"  id="addValueOptiontoModal" value="add">add</button>
+                  <button class="btn" id="addValueOptiontoModal" value="add">add</button>
                 </div>
                 <div class="modal-textarea">
                   <label for="comment">Comment:</label>

@@ -8,7 +8,7 @@ $(document).ready(function () {
 
   $('#addValueOptiontoModal').click(function (e) {
     e.preventDefault();
-    $('.ModalPollsinputs').append("<input  type='text' name='graphVal'>");
+    $('.ModalPollsinputs').append('<input  type="text" name="graphVal" required="required">');
   });
   $('#signout').click(function (e) {
 
@@ -163,6 +163,35 @@ $(document).ready(function () {
       }
     }
   });
-  
+
+     $('#searchSubmit').click(function (e) { 
+         e.preventDefault();
+  $.ajax({
+    url: '/search',
+    type: 'get',
+    dataType: 'json',
+    data: { search: $('#searchInput').val() },
+    success: function (data) {  
+      console.log(data);
+      if (data !== "") {
+        $(".polls").empty();
+for (let x =  0; x < data.length; x++) {
+          // console.log("56"+ JSON.stringify(data.polls[y].comment));
+          let tooltip = "";
+          try {
+            tooltip = Boolean(data[x].comment) ? data[x].comment : "";
+          } catch (error) {
+
+          }
+
+          $(".polls").append('<a class="container1" href=' + encodeURI(
+            '/polls/' + data[x].subId + '/' + data[x].mainId +
+            '?hide=' + code($('#modalUser').attr('value'))) + ' ><p>' + data[x].name + '</p><span class="comment" >' + tooltip + '</span></a>');
+
+        }
+}
+      }
+    });
 });
 
+});

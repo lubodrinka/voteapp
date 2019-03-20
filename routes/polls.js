@@ -120,7 +120,7 @@ app.post('/newpoll', urlencodedParser, function (req, res, next) {
                 var alreadyVoted = false;
                 console.log(subdocpolls);
                 config.options.title.text = subdocpolls.name;
-                config.type = subdocpolls.type;
+                config.type = subdocpolls.type==='undefined'?'pie':subdocpolls.type;
                 config.options.legend.display = subdocpolls.type !== "bar" ? true : false;
 
                 if (subdocpolls.votedIpAndUser.includes(user_id) || votedIpAndUser.includes(userip)) {
@@ -146,8 +146,8 @@ app.post('/newpoll', urlencodedParser, function (req, res, next) {
                             '<input id="formVoteSubmit" class="btn btn-primary shaddowbtn" value="send vote" type="submit">\n' +
                             '</form>' +
                             '<form style="' + visibleAddOption + '" id="VoteformAddoption" method="post" action="/addvote/' + subID + '.' + mainID + '.' + JSON.parse(send_id) + '">' +
-                            '<input id="addOption" type="text" class="osansfont" placeholder="addoption" name="addVote" >' +
                             '<input id="formAddVoteSubmit" class="btn btn-info shaddowbtn" value="Add vote" type="submit">' +
+                            '<input id="addOption" type="text" class="osansfont" placeholder="addoption" name="addVote"  required="required">' +
                             '</form>' +
                             '<div id="voteComment"><p>' + comment + '</p></div>' +
                             '</aside>' +
@@ -164,8 +164,6 @@ app.post('/newpoll', urlencodedParser, function (req, res, next) {
                             ' config.data.datasets[0].backgroundColor=color;\n' +
                             '$("#tweet-quote").attr("href", encodeURI("https://twitter.com/intent/tweet?text="+config.options.title.text+"|&url="+window.location.href));' +
                             'var myChart = new Chart(ctx,   config  );\n' +
-
-
                             '$("#formVoteSubmit").click(function () {\n' +
                             ' var IsChecked = $(".votebutton").is(":checked");' +
                             'if(!IsChecked){alert("select something");}' +
