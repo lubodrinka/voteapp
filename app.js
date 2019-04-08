@@ -15,6 +15,8 @@ var usersRouter = require('./routes/users');
 var twitterRouter = require('./routes/twitter');
 var googleRouter = require('./routes/google');
 var pollsRouter = require('./routes/polls');
+var githubRouter = require('./routes/GHlogin');
+var fbRouter = require('./routes/FBlogin');
 var app = express();
 
 
@@ -50,6 +52,8 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/',twitterRouter);
 app.use('/',pollsRouter);
+app.use('/',fbRouter);
+app.use('/',githubRouter);
 /*app.use('/',googleRouter);;*/
 app.enable('trust proxy');
 

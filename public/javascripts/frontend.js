@@ -133,13 +133,14 @@ $(document).ready(function () {
         //console.log(JSON.stringify(data._id)+ Boolean( JSON.stringify(data._id)));
         $('#modalUser').attr("value", Boolean(JSON.stringify(data._id)) ? JSON.stringify(data._id) : "unregistered");
         $("#socialName").text(data.name);
-
+$("#socialLogo").addClass('fa fa-' + data.social);
         if (Array.isArray(data)) {
 
           $('#signin').show();
           $('#signout').hide();
           //          $('#myPolls').hide(); 
           $("#socialPhoto").attr("src", './images/favicon.jpg');
+          
           getAll(data);
 
         } else {
@@ -164,34 +165,34 @@ $(document).ready(function () {
     }
   });
 
-     $('#searchSubmit').click(function (e) { 
-         e.preventDefault();
-  $.ajax({
-    url: '/search',
-    type: 'get',
-    dataType: 'json',
-    data: { search: $('#searchInput').val() },
-    success: function (data) {  
-      console.log(data);
-      if (data !== "") {
-        $(".polls").empty();
-for (let x =  0; x < data.length; x++) {
-          // console.log("56"+ JSON.stringify(data.polls[y].comment));
-          let tooltip = "";
-          try {
-            tooltip = Boolean(data[x].comment) ? data[x].comment : "";
-          } catch (error) {
+  $('#searchSubmit').click(function (e) {
+    e.preventDefault();
+    $.ajax({
+      url: '/search',
+      type: 'get',
+      dataType: 'json',
+      data: { search: $('#searchInput').val() },
+      success: function (data) {
+
+        if (data !== "") {
+          $(".polls").empty();
+          for (let x = 0; x < data.length; x++) {
+            // console.log("56"+ JSON.stringify(data.polls[y].comment));
+            let tooltip = "";
+            try {
+              tooltip = Boolean(data[x].comment) ? data[x].comment : "";
+            } catch (error) {
+
+            }
+
+            $(".polls").append('<a class="container1" href=' + encodeURI(
+              '/polls/' + data[x].subId + '/' + data[x].mainId +
+              '?hide=' + code($('#modalUser').attr('value'))) + ' ><p>' + data[x].name + '</p><span class="comment" >' + tooltip + '</span></a>');
 
           }
-
-          $(".polls").append('<a class="container1" href=' + encodeURI(
-            '/polls/' + data[x].subId + '/' + data[x].mainId +
-            '?hide=' + code($('#modalUser').attr('value'))) + ' ><p>' + data[x].name + '</p><span class="comment" >' + tooltip + '</span></a>');
-
         }
-}
       }
     });
-});
+  });
 
 });

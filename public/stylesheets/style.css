@@ -38,13 +38,38 @@ main {
   filter: drop-shadow(1px 1px 1px rgb(253, 252, 252));
 
 }
+.btn-link:focus, .btn-link:hover {
 
+border:1px solid transparent;
+  background-color: transparent;
+}
+.fa {
+  font-size: 12px;
+  font-family: 'FontAwesome' !important;
+}
+
+.fa-twitter, .fa-twitter-square {
+color:dodgerblue;
+}
+.fa-facebook, .fa-facebook-square {
+color: #034378;
+  
+}
+.fa-github, .fa-github-square{
+color: black;
+  
+}
 .card>img {
   max-width: 30px;
   border-color: blue;
   border-radius: 50%;
 }
+.card>div>* {
+  max-width: 30px;
+  border-color: blue;
+  border-radius: 50%;
 
+}
 #socialName {
   word-break: normal;
 }

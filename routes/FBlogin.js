@@ -7,11 +7,11 @@ var express = require('express');
 
 var passport = require('passport');
 
-var Strategy = require('passport-twitter').Strategy;
+var Strategy = require('passport-facebook').Strategy;
 
 
 
-var trustProxy = false;
+var trustProxy = true;
 /*
 if (process.env.DYNO) {
 
@@ -22,13 +22,13 @@ if (process.env.DYNO) {
 }
 */
 
-// Configure the Twitter strategy for use by Passport.
+// Configure the facebook strategy for use by Passport.
 
 //
 
 // OAuth 1.0-based strategies require a `verify` function which receives the
 
-// credentials (`token` and `tokenSecret`) for accessing the Twitter API on the
+// credentials (`token` and `tokenSecret`) for accessing the facebook API on the
 
 // user's behalf, along with the user's profile.  The function must invoke `cb`
 
@@ -37,22 +37,24 @@ if (process.env.DYNO) {
 // authentication.
 
 passport.use(new Strategy({
+  clientID: process.env.FB_CLIENT_ID,
 
-  consumerKey: process.env.TWITTER_CONSUMER_KEY,
+  clientSecret: process.env.FB_CLIENT_SECRET,
 
-  consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-
-  callbackURL: '/oauth/twitter/callback',
-
+  callbackURL: "/oauth/facebook/callback",
+ 
+  profileFields: ['id', 'displayName', 'photos'],
+   enableProof: true,
   proxy: trustProxy
+
 
 },
 
   function (token, tokenSecret, profile, cb) {
 
-    // In this example, the user's Twitter profile is supplied as the user
+    // In this example, the user's facebook profile is supplied as the user
 
-    // record.  In a production-quality application, the Twitter profile should
+    // record.  In a production-quality application, the facebook profile should
 
     // be associated with a user record in the application's database, which
 
@@ -89,7 +91,7 @@ passport.use(new Strategy({
 
 // from the database when deserializing.  However, due to the fact that this
 
-// example does not have a database, the complete Twitter profile is serialized
+// example does not have a database, the complete facebook profile is serialized
 
 // and deserialized.
 
@@ -161,16 +163,16 @@ app.get('/login',
 
   });
 
-app.get('/login/twitter',
+app.get('/login/facebook',
 
-  passport.authenticate('twitter')
+  passport.authenticate('facebook')
 );
 
-app.get('/oauth/twitter/callback',
+app.get('/oauth/facebook/callback',
 
-  passport.authenticate('twitter', { failureRedirect: '/login' }), function (req, res) {
+  passport.authenticate('facebook', { failureRedirect: '/login' }), function (req, res) {
 
-    Person.findOne({ ip: req.ip, id: req.user.id  }, function (err, docs) {
+    Person.findOne({ ip: req.ip , id: req.user.id }, function (err, docs) {
       if (err) errorhandler(err);
       if (docs) {
 
@@ -180,7 +182,7 @@ app.get('/oauth/twitter/callback',
         });
       } else {
 
-        const kitty = new Person({ signout: true, ip: req.ip, social: 'twitter', name: req.user._json.screen_name, url: req.user.photos[0].value, id: req.user.id });
+        const kitty = new Person({ signout: true, ip: req.ip, social: 'facebook', name: req.user.displayName, url: req.user.photos[0].value, id: req.user.id });
         kitty.save().then(() => console.log('new Person save' + docs));
 
 

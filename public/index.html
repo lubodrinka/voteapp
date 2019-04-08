@@ -6,13 +6,14 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <script src="javascripts/frontend.js" defer type="text/javascript"> </script>
+  <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
   <link href="stylesheets/style.css" rel="stylesheet">
 </head>
 <header>
   <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
       <div class="navbar-header">
-        <p class="navbar-brand" >Welcome</p>
+        <p class="navbar-brand">Welcome</p>
       </div>
       <ul class="nav navbar-nav">
         <li id="navHome" class="active"><a id="Home" href="/">Home</a></li>
@@ -21,10 +22,13 @@
         <li id="navAllPolls"><a id="allPolls" href="/allpolls">All Polls</a></li>
         <li>
           <div class="card">
-            <img src="./images/favicon.jpg" id="socialPhoto" alt="Avatar">
-            <b id="socialName"></b>
-            <a id="signin" href="/login/twitter">sign in</a>
-            <a id="signout" href="">sign out</a>
+            <div>
+              <img src="./images/favicon.jpg" id="socialPhoto" alt="Avatar">
+              <i id="socialLogo" class="fa "></i>
+              <b id="socialName"></b>
+            </div>
+            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#smModal">login</button>
+
           </div>
         </li>
         <li>
@@ -64,15 +68,15 @@
               <div class="modal-container">
                 <div class=newpoll-title>
                   <p>Name of Poll.</p>
-                  <input type="text" name="pollName"  required="required">
+                  <input type="text" name="pollName" required="required">
                 </div>
 
 
                 <div class="modal-article">
                   <div class="ModalPollsinputs">
                     <p>Values of Poll.</p>
-                    <input id="voteinput" type="text" name="graphVal"  required="required">
-                    <input type="text" name="graphVal"  required="required">
+                    <input id="voteinput" type="text" name="graphVal" required="required">
+                    <input type="text" name="graphVal" required="required">
                   </div>
                   <button class="btn" id="addValueOptiontoModal" value="add">add</button>
                 </div>
@@ -104,6 +108,31 @@
 
         </div>
 
+      </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="smModal" role="dialog">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Login</h4>
+          </div>
+          <div class="modal-body">
+            <p>Socials</p>
+            <ul>
+              <li><i class="fa fa-twitter-square"></i> <a href="/login/twitter">TWitter</a> </li>
+              <li> <i class="fa fa-facebook-square"></i> <a href="/login/facebook">Fb</a> </li>
+              <li> <i class="fa fa-github-square"></i> <a href="/login/github">github</a> </li>
+
+            </ul>
+          </div>
+          <div class="modal-footer">
+            <a id="signin" data-toggle="modal" data-target="#smModal">sign in</a>
+            <a id="signout" href="">sign out</a>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
       </div>
     </div>
   </main>

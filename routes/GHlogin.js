@@ -7,7 +7,7 @@ var express = require('express');
 
 var passport = require('passport');
 
-var Strategy = require('passport-twitter').Strategy;
+var Strategy = require('passport-github').Strategy;
 
 
 
@@ -38,11 +38,10 @@ if (process.env.DYNO) {
 
 passport.use(new Strategy({
 
-  consumerKey: process.env.TWITTER_CONSUMER_KEY,
 
-  consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-
-  callbackURL: '/oauth/twitter/callback',
+  clientID: process.env.GITHUB_CLIENT_ID,
+  clientSecret: process.env.GITHUB_CLIENT_SECRET,
+  callbackURL: "/oauth/github/callback",
 
   proxy: trustProxy
 
@@ -161,16 +160,16 @@ app.get('/login',
 
   });
 
-app.get('/login/twitter',
+app.get('/login/github',
 
-  passport.authenticate('twitter')
+  passport.authenticate('github')
 );
 
-app.get('/oauth/twitter/callback',
+app.get('/oauth/github/callback',
 
-  passport.authenticate('twitter', { failureRedirect: '/login' }), function (req, res) {
+  passport.authenticate('github', { failureRedirect: '/login' }), function (req, res) {
 
-    Person.findOne({ ip: req.ip, id: req.user.id  }, function (err, docs) {
+    Person.findOne({ ip: req.ip , id: req.user.id }, function (err, docs) {
       if (err) errorhandler(err);
       if (docs) {
 
@@ -180,7 +179,7 @@ app.get('/oauth/twitter/callback',
         });
       } else {
 
-        const kitty = new Person({ signout: true, ip: req.ip, social: 'twitter', name: req.user._json.screen_name, url: req.user.photos[0].value, id: req.user.id });
+        const kitty = new Person({ signout: true, ip: req.ip, social: 'github', name: req.user.displayName, url:  req.user.photos[0].value, id: req.user.id });
         kitty.save().then(() => console.log('new Person save' + docs));
 
 
