@@ -1,0 +1,14 @@
+extends layout.pug
+block content
+  .polls
+    each object in data
+      each polls in object.polls
+        -let tooltip =Boolean(polls.comment)? polls.comment : ""; 
+        a.container1(href=encodeURI('/polls/' + polls._id+ '/' + object._id))
+          p=polls.name
+          if(polls.test)
+            h5(style={color:'red'})="TEST"
+          span.comment=tooltip
+            hr
+            p.author='Author: '+object.name
+                

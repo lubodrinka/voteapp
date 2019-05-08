@@ -11,7 +11,7 @@ var Strategy = require('passport-github').Strategy;
 
 
 
-var trustProxy = false;
+var trustProxy = true;
 /*
 if (process.env.DYNO) {
 
@@ -66,7 +66,23 @@ passport.use(new Strategy({
 
     // console.log(profile.photos[0].value);
     //sessionStorage.setItem(1,  JSON.stringify({Name:profilejSOn.displayName ,Photo:profilejSOn.photos[0].value}));
-    return cb(null, profile);
+    Person.findOne({ _id: profile.id }, function (err, docs) {
+      if (err) return errorHandler(err); 
+    
+    if (docs) {
+      docs.signout=false;
+      docs.signout=true;
+      docs.save(function (err) {
+          if (err) return errorHandler(err); 
+          return cb(null, docs);
+        });
+    
+    } else {
+     return cb(null, profile);
+    }
+
+  });
+return cb(null, profile);
 
   }));
 
@@ -94,7 +110,7 @@ passport.use(new Strategy({
 
 passport.serializeUser(function (user, cb) {
 
-  cb(null, user);
+  cb(null, user._id);
 
 });
 
@@ -102,7 +118,17 @@ passport.serializeUser(function (user, cb) {
 
 passport.deserializeUser(function (obj, cb) {
 
-  cb(null, obj);
+  Person.findOne({ _id: obj }, function (err, docs) {
+
+    if (err) errorHandler(err);
+    if (docs) {
+      cb(null, docs);
+    } else {
+      cb(null, obj);
+    }
+
+  });
+
 
 });
 
@@ -119,13 +145,7 @@ app = express();
 
 // logging, parsing, and session handling.
 
-app.use(require('morgan')('combined'));
 
-app.use(require('cookie-parser')());
-
-app.use(require('body-parser').urlencoded({ extended: true }));
-
-app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
 
 
 
@@ -133,9 +153,7 @@ app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveU
 
 // session.
 
-app.use(passport.initialize());
 
-app.use(passport.session());
 app.get('/', function (req, res) {
   // console.log("home send");
   res.render('home', { user: req.user });
@@ -187,7 +205,7 @@ app.get('/oauth/github/callback',
 
 
     });
-    res.redirect('/');
+    res.redirect('/autologin');
   });
 
 

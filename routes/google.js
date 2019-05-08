@@ -44,14 +44,10 @@ passport.serializeUser(function (user, done) {
   
   // configure Express
   var express = require('express');
-  var router = express.Router();
+ 
   var app = express();
   
-    app.use(logger('dev'));
-    app.use(bodyParser.json());
-    app.use(methodOverride());
-    app.use(session({ resave: true,
-      saveUninitialized: true,secret: 'keyboard cat' }));
+
     // Initialize Passport!  Also use passport.session() middleware, to support
   
     // Use application-level middleware for common functionality, including
@@ -68,7 +64,7 @@ passport.serializeUser(function (user, done) {
   
   app.use(passport.session());
 
-;//process.env.
+//process.env.
 /* GET home page. */
 function ensureAuthenticated(req, res, next) {
 

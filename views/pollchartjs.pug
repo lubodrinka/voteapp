@@ -1,0 +1,46 @@
+extends layout.pug
+block content
+    -var user2=user?user:"";  
+      .mainContent
+        canvas#myChart(width='500', height='500')
+        div#chartdiv       
+        aside#votePanel 
+          h2(style={color:'red'})=test?'TEST!':""      
+          form#formVote(action='/vote/' + subID + '.' + mainID + '.' +user2.id , method='get')                              
+            each items in voteButtons
+              p
+                input(type="radio" class="votebutton" name="votebutton" value=items.subdatesId)
+                label=items.subdatesName
+            input#formVoteSubmit.btn.btn-primary.shaddowbtn(type='submit', value='send vote')
+          form#VoteformAddoption(style=visibleAddOption, action='/addvote/' + subID + '.' + mainID + '.' + user2.id, method='post')           
+            input#formAddVoteSubmit.btn.btn-info.shaddowbtn(type='submit', value='Add vote')            
+            input#addOption.osansfont(name='addVote', required='required', type='text', placeholder='addoption' style=visibleAddOption )            
+          #voteComment
+          br
+          p=comment 
+        #footBtn.btn-group.btn-group-justified
+          a.btn-group.btn-primary(role='button', href='/') Home
+          a#tweet-quote.btn-group.btn-info.twitter-share-button(role='button', href='', target='_blank', rel='me') Share
+          a(role="button" type="button" class='btn-group btn btn-danger '+ visibledelete , href='/delete/' + subID + '/' + mainID) Delete poll
+          if(window)
+            each object, key in window
+              script.
+                  window.!{key} = !{JSON.stringify(object)}
+      script(src='https://www.amcharts.com/lib/4/core.js')
+      script(src='https://www.amcharts.com/lib/4/charts.js')
+      script(src='https://www.amcharts.com/lib/4/themes/animated.js')    
+      script(src='/javascripts/jquery-3.3.1.min.js')
+      script(src='/javascripts/chart.js', type='text/javascript')
+      script(src='/javascripts/Chart.min.js', type='text/javascript')     
+      link(href='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css', rel='stylesheet')    
+      script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js') 
+      script(src='/javascripts/pollam.js')    
+       
+        
+        
+        
+          
+    
+
+
+        

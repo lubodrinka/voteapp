@@ -1,0 +1,109 @@
+doctype html
+html(lang='en')
+  head
+    script(src='/javascripts/jquery-3.3.1.min.js', type='text/javascript')
+    link(href='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css', rel='stylesheet')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js')    
+    link(href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', rel='stylesheet prefetch')
+    link(href='/stylesheets/style.css', rel='stylesheet')
+  body
+    header
+      nav.navbar.navbar-inverse.navbar-fixed-top
+        .container-fluid
+          .navbar-header
+            p.navbar-brand Welcome
+          ul.nav.navbar-nav
+            li#navHome.active
+              a#Home(href='/') Home
+            if(user) 
+              li#navNewpoll
+                a(href='', data-target='#myModal', data-toggle='modal') New Poll            
+              li#navMyPolls
+                a#myPolls(href='../../mypolls') My Polls
+
+            li#navAllPolls
+              a#allPolls(href='../../allpolls') All Polls
+            li
+              .card
+                div
+                -var name=user?user.name:'unreg';
+                -var photo=user?user.url:'../images/favicon.jpg';
+                  img#socialPhoto(alt='', src=photo)
+                  if(user)
+                    i#socialLogo(class="fa fa-" +  user.social)
+                  b#socialName=name
+                button.btn.btn-link(type='button', data-target='#smModal', data-toggle='modal') login
+            li
+             form(action="/search", method="get").form-group.navbar-form.navbar-right
+                input#searchInput.form-control(name='search', type='text', placeholder='Search')
+                button#searchSubmit.btn.btn-default(type='submit') Submit
+    main
+      br
+      block content
+
+      #myModal.modal.fade(role='dialog')
+        .modal-dialog
+          // Modal content
+          .modal-content
+            .modal-header
+              button.close(type='button', data-dismiss='modal') ×
+              h4.modal-title Create graph
+            .modal-body.latofont
+              form#usrform(action='../../newpoll', method='post')
+                .modal-container
+                  .newpoll-title
+                    p Name of Poll.
+                    input(name='pollName', required='required', type='text')
+                  .modal-article
+                    .ModalPollsinputs
+                      p Values of Poll.
+                      input#voteinput(name='graphVal', required='required', type='text')
+                      input(name='graphVal', required='required', type='text')
+                      label.switch
+                        | test 
+                        input(name='demo', type='checkbox')
+                        span.slider
+                    button#addValueOptiontoModal.btn(value='add') add
+                  .modal-textarea
+                    label(for='comment') Comment:
+                    textarea#comment.form-control(name='comment', rows='5', form='usrform')
+                  .ModalPollsinputradio
+                    p Type of Chart
+                    input(name='graphType', type='radio', checked='', value='pie')
+                    | pie
+                    input(name='graphType', type='radio', value='bar')
+                    | bar
+                    input(name='graphType', type='radio', value='doughnut')
+                    | doughnut
+                    input(name='graphType', type='radio', value='radar')
+                    | radar
+                    input#modalUser(name='User_id', type='hidden')
+                  .btn.newpoll-footer(style='text-align: left')
+                    input.btn(type='submit', value='send')
+            .modal-footer
+              button.btn.btn-default(type='button', data-dismiss='modal') Close
+      // Modal
+      #smModal.modal.fade(role='dialog')
+        .modal-dialog.modal-sm
+          .modal-content
+            .modal-header
+              button.close(type='button', data-dismiss='modal') ×
+              h4.modal-title Login
+            .modal-body
+              p Socials
+              ul
+                li
+                  i.fa.fa-twitter-square
+                  a(href='../../login/twitter') TWitter
+                li
+                  i.fa.fa-facebook-square
+                  a(href='../../login/facebook') Fb
+                li
+                  i.fa.fa-github-square
+                  a(href='../../login/github') github
+            .modal-footer
+              if(user)
+                a#signout(href='../../signout') sign out
+              else  
+                a#signin(href="../../autologin" data-target='#smModal', data-toggle='modal') sign in
+              button.btn.btn-default(type='button', data-dismiss='modal') Close

@@ -101,7 +101,7 @@ nav {
   color: #e7e7e7;
   text-align: center;
   text-decoration: none;
-  margin: 10px 10px;
+  margin: 10px 50px;
   -webkit-transition-duration: 0.4s;
   /* Safari */
   transition-duration: 0.4s;
@@ -186,17 +186,21 @@ a:hover {
   display: flex;
   justify-content: flex-start;
   flex-flow: wrap;
-
   margin-top: 50px;
+}
+.author{
+  text-shadow: 1px 1px 1px black;
 }
 
 /*hlasovanie*/
 #myChart {
   grid-area: vote-myChart;
+  z-index: 2;
 }
 
 #votePanel {
   grid-area: votePanel;
+
 }
 
 #footBtn {
@@ -204,20 +208,26 @@ a:hover {
  
 }
 
-.mainContent {margin: 0 25% 0 25%; 
+.mainContent {margin: 0 0 0 0; 
   display: grid;
   grid-gap: 1em;
-  grid-template-columns: 400px 200px;
+  grid-template-columns: auto auto;
   grid-template-rows: auto auto;
   grid-template-areas:
     "vote-myChart votePanel"
     "buttons buttons";
- 
+    
+}
+#chartdiv {
+  width: 100%;
+  min-height: 500px;
+  height: auto;
+  z-index: 2;
 }
 
-
 #votePanel {
-  width: 200px;
+  height: auto;
+  width: auto;
   font-family: 'Great Vibes', cursive;
   font-size: 14pt;
   padding: 15px;
@@ -226,6 +236,7 @@ a:hover {
     2px 2px 12px rgba(0, 0, 0, 0.5),
     3px 3px 15px rgba(0, 0, 0, 0.4),
     3px 3px 18px rgba(0, 0, 0, 0.3);
+    z-index: 1;
 }
 
 #votePannel>form>input,
@@ -367,7 +378,11 @@ input[type=radio] {
     "ModalPollsinputradio modal-textarea"
     "newpoll-footer modal-textarea";
 }
+#formVote{
+display: grid;
+grid-template-columns: 1fr 1fr;
 
+}
 .indiefont {
   font-family: 'Indie Flower', cursive;
 }

@@ -11,7 +11,7 @@ var Strategy = require('passport-twitter').Strategy;
 
 
 
-var trustProxy = false;
+var trustProxy = true;
 /*
 if (process.env.DYNO) {
 
@@ -67,7 +67,21 @@ passport.use(new Strategy({
 
     // console.log(profile.photos[0].value);
     //sessionStorage.setItem(1,  JSON.stringify({Name:profilejSOn.displayName ,Photo:profilejSOn.photos[0].value}));
-    return cb(null, profile);
+    Person.findOne({ id: profile.id }, function (err, docs) {
+
+      if (err) errorHandler(err);
+      if (docs) {
+        console.log(docs);
+        docs.signout = false;
+        docs.signout = true;
+        docs.save();
+        return cb(null, docs);
+      } else {
+        return cb(null, profile);
+      }
+
+    });
+
 
   }));
 
@@ -95,15 +109,24 @@ passport.use(new Strategy({
 
 passport.serializeUser(function (user, cb) {
 
-  cb(null, user);
+  cb(null, user._id);
 
 });
 
 
 
 passport.deserializeUser(function (obj, cb) {
+console.log("121"+obj);
+  Person.findOne({ _id: obj }, function (err, docs) {
 
-  cb(null, obj);
+    if (err)errorHandler(err);
+    if (docs) {
+      cb(null, docs);
+    } else {
+      cb(null, obj);
+    }
+
+  });
 
 });
 
@@ -170,7 +193,7 @@ app.get('/oauth/twitter/callback',
 
   passport.authenticate('twitter', { failureRedirect: '/login' }), function (req, res) {
 
-    Person.findOne({ ip: req.ip, id: req.user.id  }, function (err, docs) {
+    Person.findOne({ ip: req.ip, id: req.user.id }, function (err, docs) {
       if (err) errorhandler(err);
       if (docs) {
 
@@ -188,7 +211,7 @@ app.get('/oauth/twitter/callback',
 
 
     });
-    res.redirect('/');
+    res.redirect('/autologin');
   });
 
 

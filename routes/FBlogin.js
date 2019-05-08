@@ -42,9 +42,9 @@ passport.use(new Strategy({
   clientSecret: process.env.FB_CLIENT_SECRET,
 
   callbackURL: "/oauth/facebook/callback",
- 
+
   profileFields: ['id', 'displayName', 'photos'],
-   enableProof: true,
+  enableProof: true,
   proxy: trustProxy
 
 
@@ -69,7 +69,25 @@ passport.use(new Strategy({
 
     // console.log(profile.photos[0].value);
     //sessionStorage.setItem(1,  JSON.stringify({Name:profilejSOn.displayName ,Photo:profilejSOn.photos[0].value}));
-    return cb(null, profile);
+
+    Person.findOne({ id: profile.id }, function (err, docs) {
+
+      if (err) errorHandler(err);
+      if (docs) {
+        docs.signout = false;
+        docs.signout = true;
+        docs.save(function (err) {
+          if (err) return errorHandler(err);
+           return cb(null, docs);
+        });
+       
+      } else {
+        return cb(null, profile);
+      }
+
+    });
+
+
 
   }));
 
@@ -96,16 +114,25 @@ passport.use(new Strategy({
 // and deserialized.
 
 passport.serializeUser(function (user, cb) {
-
-  cb(null, user);
+console.log(116+user);
+  cb(null, user._id);
 
 });
 
 
 
 passport.deserializeUser(function (obj, cb) {
+  Person.findOne({ _id: obj }, function (err, docs) {
 
-  cb(null, obj);
+    if (err) errorHandler(err);
+    if (docs) {
+      cb(null, docs);
+    } else {
+      cb(null, obj);
+    }
+
+  });
+
 
 });
 
@@ -122,28 +149,14 @@ app = express();
 
 // logging, parsing, and session handling.
 
-app.use(require('morgan')('combined'));
-
-app.use(require('cookie-parser')());
-
-app.use(require('body-parser').urlencoded({ extended: true }));
-
-app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
-
 
 
 // Initialize Passport and restore authentication state, if any, from the
 
 // session.
 
-app.use(passport.initialize());
 
-app.use(passport.session());
-app.get('/', function (req, res) {
-  // console.log("home send");
-  res.render('home', { user: req.user });
 
-});
 
 
 
@@ -172,10 +185,10 @@ app.get('/oauth/facebook/callback',
 
   passport.authenticate('facebook', { failureRedirect: '/login' }), function (req, res) {
 
-    Person.findOne({ ip: req.ip , id: req.user.id }, function (err, docs) {
+    Person.findOne({ ip: req.ip, id: req.user.id }, function (err, docs) {
       if (err) errorhandler(err);
       if (docs) {
-
+        
         docs.signout = true;
         docs.save(function (err) {
           if (err) return handleError(err);
@@ -190,7 +203,7 @@ app.get('/oauth/facebook/callback',
 
 
     });
-    res.redirect('/');
+    res.redirect('/autologin');
   });
 
 
